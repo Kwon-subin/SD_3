@@ -1,4 +1,5 @@
 # ElasticSearch Guide
+# pip elasticsearch 설치
 
 # 만드시는 py 파일과 같은 폴더에 넣어두고
 # import ESGuide as es 하신 후
@@ -17,7 +18,7 @@ es.indices.delete(index='*') #테스트 끝나면 삭제
 #필요한 테이블들 생성
 #테이블 이름은 모두 소문자로 작성해주세요
 #테이블 추가, 이름 수정 가능
-idxs = ['account', 'teacher', 'class', 'category', 'regist_request', 'post', 'reply']
+idxs = ['account', 'teacher', 'class', 'category', 'regist_request', 'post', 'post_num', 'reply']
 for idx in idxs:
         if not es.indices.exists(index=idx):
                 es.indices.create(index=idx)
@@ -29,7 +30,46 @@ def get_idx(idx):
                 data = es.search(index=idx, body={'query':{'match_all':{}}})
                 return data['hits']['hits']
         else:
-                print("Error: idx does not exist.")
+                return -1
+
+
+#index 가져오기 + sort(리스트로 작성)
+def get_sorted_idx(idx, sort):
+        if es.indices.exists(index=idx):
+                try:
+                        data = es.search(
+                                index=idx, 
+                                body={
+                                        'query':{'match_all':{}},
+                                        'sort':sort
+                                })
+                        return data['hits']['hits']
+                except:
+                        data = get_idx(idx)
+                        return data
+        
+        else:
+                return -1
+
+
+#index 가져오기 + sort(리스트로 작성) + size(f=시작점, size=크기)
+def get_idx_by_size(idx, sort, f, size):
+        if es.indices.exists(index=idx):
+                try:
+                        data = es.search(
+                                index=idx,
+                                body = {
+                                        'from':f,
+                                        'size':size,
+                                        'query':{'match_all':{}},
+                                        'sort':sort
+                                })
+                        return data['hits']['hits']
+                except:
+                        data = get_idx(idx)
+                        return data
+                        
+        else:
                 return -1
 
 
@@ -38,7 +78,6 @@ def insert_doc(idx, pid, doc):
         try:
                 es.index(index=idx, id=pid, body=doc)
         except:
-                print("Error: doc's data format is different from idx's data format")
                 return -1
 
         es.indices.refresh(index=idx)
@@ -48,7 +87,6 @@ def insert_doc(idx, pid, doc):
 #document 여러개 저장
 def insert_docs(idx, pids, docs): #idx에 pids[0]로 docs[0]를 ... pids[n]으로 docs[n]을 넣겠다
         if len(pids)!=len(docs):
-                print("Error: pids's & docs's length must be same.")
                 return -1
         
         _docs = []
@@ -70,7 +108,6 @@ def get_doc(idx, pid):
                 doc = es.get(index=idx, id=pid)
                 return doc
         except:
-                print("Error: data does not exist.")
                 return -1
 
 
@@ -81,7 +118,6 @@ def get_docs(idx, pids): #idx의 pid=pids[0], pids[1] ... pids[n]인 데이터�
                 docs = es.mget(index=idx, body=ids)
                 return docs['docs']
         except:
-                print("Error: data does not exist.")
                 return -1
 
 
@@ -92,7 +128,50 @@ def search_doc(idx, cond): #cond는 tuple 형태
                 res = es.search(index=idx, body=condition)
                 return res['hits']['hits']
         except:
-                print("Error: data does not exist.")
+                return -1
+
+
+#조건으로 sorted document 찾기
+def search_sorted_doc(idx, cond, sort):
+        try:
+                bd = {'sort':sort, 'query':{'match':cond}}
+                res = es.search(index=idx, body=bd)
+                return res['hits']['hits']
+        except:
+                return -1
+
+
+#param의 범위로 documents 찾기
+def search_doc_by_range(idx, param, f, to):
+        docs = es.search(index=idx, body={'query':{
+                                        'bool':{
+                                        'filter':[{
+                                        'range':{
+                                        param:{
+                                                'gte':f, 
+                                                'lt':to
+                                                }}}]}}})
+        
+        return docs['hits']['hits']
+
+
+#search_doc_by_range + sort
+def search_dbr_sorted(idx, param, f, to, sort):
+        try:
+                docs = es.search(index=idx, 
+                        body={'sort':sort,
+                                'query':{
+                                        'bool':{
+                                                'filter':[{
+                                                'range':{
+                                                        param:{
+                                                                'gte':f, 
+                                                                'lt':to
+                                                        }}}]}}})
+        
+                return docs['hits']['hits']
+        
+        except:
                 return -1
 
 
@@ -115,7 +194,7 @@ if __name__=='__main__':
                 'PW' : 'String',
                 'name' : 'String',
                 'age' : int(0), #만나이로 통일
-                'birth' : 'String', #YYYYMMDD
+                'birth' : 'String', #YYYY-MM-DD
                 'phone' : 'String', #'-'포함
                 'T' : False #Teacher, Teacher > True, Student > False
                 }
@@ -131,7 +210,7 @@ if __name__=='__main__':
                 'ID' : 'String',
                 'c_name' : 'String',
                 'cost' : int(0),
-                'when' : 'String', #YYYYMMDDHHMM (시간은 24시간 단위)
+                'when' : 'String', #YYYY-MM-DD/HH:MM (시간은 24시간 단위)
                 'M' : False, #Meet, Offline > True, Online > False
                 }
         insert_doc('class', 'guide', _class)
@@ -148,21 +227,29 @@ if __name__=='__main__':
                 }
         insert_doc('regist_request', 'guide', regist_request)
         
-        post = { #pid = post_num
+        post = { #pid = post_num (0000~9999)
                 'ID' : 'String',
                 'title' : 'String',
                 'content' : 'String',
-                'time' : 'String', #YYYYMMDDHHMM (시간은 24시간 단위)
+                'time' : 'String', #YYYY-MM-DD/HH:MM (시간은 24시간 단위)
                 'recommend' : int(0),
-                'report' : int(0)
+                'report' : int(0),
+                'hash' : 'String'
                 }
         insert_doc('post', 'guide', post)
 
-        reply = { #pid = post_num
+
+        post_num = { #id = "post_num"
+                "POST_NUM" : int(0)
+        }
+        insert_doc('post_num', 'post_num', post_num)
+
+
+        reply = { #pid = post_num + reply_num (000~999)
+                'id' : 'String', #pid와 같음, get_docs_by_range 를 위함
                 'ID' : 'String',
                 'content' : 'String',
-                'time' : 'String', #YYYYMMDDHHMM (시간은 24시간 단위)
+                'time' : 'String', #YYYY-MM-DD/HH:MM (시간은 24시간 단위)
                 'report' : int(0)
                 }
         insert_doc('reply', 'guide', reply)
-
