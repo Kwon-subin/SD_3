@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+
+<html>
+    <head>
+        <script language="javascript">
+            function postForm(path, params, method) {
+                method = method || 'post';
+
+                var form = document.createElement('form');
+                form.setAttribute('method', method);
+                form.setAttribute('action', path);
+
+                for (var key in params) {
+                    if (params.hasOwnProperty(key)) {
+                        var hiddenField = document.createElement('input');
+                        hiddenField.setAttribute('type', 'hidden');
+                        hiddenField.setAttribute('name', key);
+                        hiddenField.setAttribute('value', params[key]);
+                    
+                        form.appendChild(hiddenField);
+                    }
+                }
+
+                document.body.appendChild(form);
+                form.submit();
+            }
+        </script>
+    </head>
+    <body>
+        <table>
+        <!-- 로그인한 ID 확인용 -->
+        <tr><td>안녕하세요, {{ID}} 님</td></tr>
+
+        <!-- 페이지의 Post 정보 출력 -->
+            {% for post in posts %}
+                <tr><td>
+                        <form action="/read" method="POST">
+                            <input type="hidden" name="post_id" value="{{post['_id']}}">
+                            <input type="hidden" name="page" value="{{page}}">
+                            <input type="hidden" name="ID" value="{{ID}}">
+                            <input type="submit" value="{{post['_source']['title']}}">
+                        </form>
+                </td></tr>
+            {% endfor %}
+            <!-- 페이지 이동 -->
+            <tr>
+                <td>
+                    <input type="submit" onclick="postForm('backpage', {'ID':'{{ID}}', 'page':'{{page}}'})" value="이전 페이지">
+                </td>
+                <td>
+                    <input type="submit" onclick="postForm('nextpage', {'ID':'{{ID}}', 'page':'{{page}}'})" value="다음 페이지">
+                </td>
+            </tr><br>
+
+            <!-- Post 버튼 -->
+            <tr>
+                <td>
+                <input type="submit" onclick="postForm('post', {'ID':'{{ID}}'})" value="작성">
+                </td>
+            </tr><br>
+
+            <!-- 검색 -->
+            <tr>
+                <td>
+                    <form action="/search" method="GET">
+                        <input type="hidden" name="ID" value="{{ID}}">
+                        <input type="text" name="condition"> <input type="submit" value="검색">
+                    </form>
+                </td>
+            </tr>
+        </table>
+    </body>
+</html>
