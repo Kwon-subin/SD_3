@@ -1,0 +1,77 @@
+﻿<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+</head>
+<body>
+ 
+            <h3 class=" ">기본정보</h3>
+            <form name="register_in" action="/info_insert" method="post">
+            <div class="ec-base-table typeWrite">
+                <table border="1" summary="">
+                    <colgroup>
+                        <col style="width:150px;">
+                        <col style="width:auto;">
+                    </colgroup>
+                    <tbody>
+                        <tr>
+                            <th scope="row">아이디 <img src="//img.echosting.cafe24.com/skin/base/common/ico_required_blue.gif" alt="필수"></th>
+                            <td><input id="member_id" name="member_id" fw-filter="isFill&amp;isFill&amp;isMin[4]&amp;isMax[16]&amp;isIdentity" fw-label="아이디" fw-msg="" class="inputTypeText" placeholder="" value="" type="text"> <span id="idMsg"></span> (영문소문자/숫자, 4~16자)</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">비밀번호 <img src="//img.echosting.cafe24.com/skin/base/common/ico_required_blue.gif" alt="필수"></th>
+                            <td>
+                                <div class="eTooltip">
+                                    <input id="passwd" name="passwd" fw-filter="isFill&amp;isMin[4]&amp;isMax[16]" fw-label="비밀번호" fw-msg="" autocomplete="off" maxlength="16" 0="disabled" value="" type="password">                        <div class="ec-base-tooltip typeUpper">
+
+                                        <span class="edge"></span>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th scope="row">비밀번호 확인 <img src="//img.echosting.cafe24.com/skin/base/common/ico_required_blue.gif" alt="필수"></th>
+                            <td><input id="user_passwd_confirm" name="user_passwd_confirm" fw-filter="isFill&amp;isMatch[passwd]" fw-label="비밀번호 확인" fw-msg="비밀번호가 일치하지 않습니다." autocomplete="off" maxlength="16" 0="disabled" value="" type="password"> <span id="pwConfirmMsg"></span> </td>
+                        </tr>
+
+                        <tr>
+                            <th scope="row" id="nameTitle">이름 <img src="//img.echosting.cafe24.com/skin/base/common/ico_required_blue.gif" alt="필수"></th>
+                            <td>
+                                <span id="nameContents"><input type="text" name="name" id="name" maxlength="20"></span>
+                                <span id="under14Msg" class="displaynone">14세 미만 사용자는 법정대리인 동의가 필요합니다.</span>
+                            </td>
+                        </tr>
+
+                        <tr class="">
+                            <th scope="row">생년월일<img src="//img.echosting.cafe24.com/skin/base/common/ico_required_blue.gif" class="" alt="필수"></th>
+                            <td>
+                                <span id="nameContents"><input type="text" name="birth" id="birth" maxlength="20"></span>
+
+                            </td>
+                        </tr>
+                        <tr class=""></tr>
+                        <tr class="">
+                            <th scope="row">휴대전화 <img src="//img.echosting.cafe24.com/skin/base/common/ico_required_blue.gif" class="" alt="필수"></th>
+                            <td>
+                                <input type="text" name="phone" id="phone" maxlength="20">
+                            </td>
+                        </tr>
+                        <tr>
+                            <th scope="row">강사/회원 <img src="//img.echosting.cafe24.com/skin/base/common/ico_required_blue.gif" alt="필수"></th>
+                            <td>
+                                <select id="T" name="T" form="register_in">
+                                    <option value="True">강사</option>
+                                    <option value="False">수강생</option>
+                                </select>
+                            </td>
+                        </tr>
+
+                    </tbody>
+                </table>
+                <input type="submit" value="회원가입">
+            </div>
+            </form>
+</body>
+</html>
