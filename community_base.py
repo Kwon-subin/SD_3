@@ -95,6 +95,7 @@ def read(id): #id를 받아 해당 id의 글을 읽음
         'time' : doc['_source']['time'],
         'recommend' : doc['_source']['recommend'],
         'report' : doc['_source']['report'],
+        'hash' : doc['_source']['hash'],
         'replys' : replys
     }
 
@@ -124,7 +125,7 @@ def post(ID, title, content, hashs):
         'report' : 0,
         'hash' : hashs
     }
-
+    print(post)
     es.insert_doc('post', POST_NUM, post)
     pn = int(POST_NUM) + 1
     if(pn > 9999):
@@ -243,9 +244,28 @@ def reply_delete(reply_id):
 
 
 
-def search(hash):
-    cond = {'hash' : hash}
-    docs = es.search_sorted_doc('post', cond, {'_id':'desc'})
-    print(cond, docs)
+def search(condition):
+    cond = {'hash' : condition}
+    body = {
+        'sort':{'_id':'desc'},
+        'query':{
+            'bool':{
+                'should':[
+                    {
+                    'match':{
+                        'title':condition
+                    }
+                    },
+                    {
+                    'match':{
+                        'hash':condition
+                    }
+                    }
+                ]
+            }
+        }
+    }
+    docs = es.search_doc2('post', body)
+
 
     return docs

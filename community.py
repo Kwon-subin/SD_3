@@ -1,10 +1,17 @@
 import community_base as cb
 from flask import Flask, render_template, request, redirect, url_for, session
+import string
+import random
 
 
 
 
+string_pool = string.ascii_letters + string.digits + string.punctuation
+key = ""
+for i in range(10):
+    key += random.choice(string_pool)
 app = Flask(__name__)
+app.secret_key = key
 
 READING_SIZE = 3
 
@@ -20,18 +27,20 @@ def main():
 @app.route('/login', methods=['POST'])
 def login():
     ID = request.form['ID']
+    session['user_id'] = ID
+
     cb.set_reading_size(READING_SIZE)
 
-    return redirect(url_for('community', page = 0), code = 307)
+    return redirect(url_for('community', page = 0))
 
 
 
 
 ########### 페이지 관련 ###########
 
-@app.route('/community', methods=['POST'])
+@app.route('/community', methods=['GET'])
 def community():
-    ID = request.form['ID']
+    ID = session.get('user_id')
     page = int(request.args.get('page'))
     docs, page = cb.show(page)
     
@@ -40,35 +49,33 @@ def community():
 
 @app.route('/nextpage', methods=['POST'])
 def nextpage():
-    ID = request.form['ID']
     page = int(request.form['page'])
     page = cb.next_page(page)
 
-    return redirect(url_for('community', page = page), code = 307)
+    return redirect(url_for('community', page = page))
 
 
 @app.route('/backpage', methods=['POST'])
 def backpage():
-    ID = request.form['ID']
     page = int(request.form['page'])
     page = cb.back_page(page)
 
-    return redirect(url_for('community', page = page), code = 307)
+    return redirect(url_for('community', page = page))
 
 
 
 
 ########### 글쓰기 ###########
 
-@app.route('/post', methods=['POST'])
+@app.route('/post')
 def post():
-    ID = request.form['ID']
+    ID = session.get('user_id')
 
     return render_template('post.html', ID = ID)
 
 @app.route('/posting', methods=['POST'])
 def posting():
-    ID = request.form['ID']
+    ID = session.get('user_id')
     title = request.form['title']
     content = request.form['content']
     hashtags = request.form['hashtags']
@@ -76,7 +83,7 @@ def posting():
     cb.post(ID, title, content, hashtags)
 
 
-    return redirect(url_for('community', page = 0), code = 307)
+    return redirect(url_for('community', page = 0))
 
 
 
@@ -85,7 +92,7 @@ def posting():
 
 @app.route('/read', methods=['POST'])
 def read():
-    ID = request.form['ID']
+    ID = session.get('user_id')
     post_id = request.form['post_id']
     page = int(request.form['page'])
     post = cb.read(post_id)
@@ -98,7 +105,6 @@ def read():
 
 @app.route('/recommend', methods=['POST'])
 def recommend():
-    ID = request.form['ID']
     post_id = request.form['post_id']
     no = cb.recommend(post_id)
     page = int(request.form['page'])
@@ -110,7 +116,6 @@ def recommend():
 
 @app.route('/report', methods=['POST'])
 def report():
-    ID = request.form['ID']
     post_id = request.form['post_id']
     no = cb.report(post_id)
     page = int(request.form['page'])
@@ -122,7 +127,7 @@ def report():
 
 @app.route('/revise', methods=['POST'])
 def revise():
-    ID = request.form['ID']
+    ID = session.get('user_id')
     post_id = request.form['post_id']
     page = int(request.form['page'])
     post = cb.read(post_id)
@@ -134,7 +139,6 @@ def revise():
 
 @app.route('/revising', methods=['POST'])
 def revising():
-    ID = request.form['ID']
     post_id = request.form['post_id']
     page = int(request.form['page'])
     title = request.form['title']
@@ -151,12 +155,11 @@ def revising():
 
 @app.route('/delete', methods=['POST'])
 def delete():
-    ID = request.form['ID']
     post_id = request.form['post_id']
     page = int(request.form['page'])
     cb.delete(post_id)
 
-    return redirect(url_for('community', page = page), code = 307)
+    return redirect(url_for('community', page = page))
 
 
 
@@ -165,7 +168,7 @@ def delete():
 
 @app.route('/reply', methods=['POST'])
 def reply():
-    ID = request.form['ID']
+    ID = session.get('user_id')
     content = request.form['content']
     post_id = request.form['post_id']
     no = cb.reply(post_id, ID, content)
@@ -179,7 +182,6 @@ def reply():
 
 @app.route('/reply_report', methods=['POST'])
 def reply_report():
-    ID = request.form['ID']
     reply_id = request.form['reply_id']
     
     no = cb.reply_report(reply_id)
@@ -193,7 +195,6 @@ def reply_report():
 
 @app.route('/reply_revise', methods=['POST'])
 def reply_revise():
-    ID = request.form['ID']
     reply_id = request.form['reply_id']
     content = request.form['content']
     page = int(request.form['page'])
@@ -208,7 +209,6 @@ def reply_revise():
 
 @app.route('/reply_delete', methods=['POST'])
 def reply_delete():
-    ID = request.form['ID']
     reply_id = request.form['reply_id']
 
     no = cb.reply_delete(reply_id)
@@ -222,10 +222,10 @@ def reply_delete():
 
 ########### 검색 ###########
 
-@app.route('/search', methods=['GET'])
+@app.route('/search', methods=['POST'])
 def search():
-    ID = request.args.get('ID')
-    condition = request.args.get('condition')
+    ID = session.get('user_id')
+    condition = request.form['condition']
     
     docs = cb.search(condition)
     if docs == -1:
