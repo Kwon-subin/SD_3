@@ -6,10 +6,9 @@
         <form action="/revising" method="POST">
             <input type="hidden" name="page" value="{{page}}">
             <input type="hidden" name="post_id" value="{{post_id}}">
-            <input type="hidden" name="ID" value="{{ID}}">
             제목: <input type="text" name="title" value="{{reading['title']}}"> <br>
             내용: <input type="text" name="content" value="{{reading['content']}}"> <br>
-            키워드: <input type="text" name="hashtags"> <br>
+            키워드: <input type="text" name="hashtags" value="{{reading['hash']}}"> <br>
             <button type="submit">작성</button>
         </form>
     </body>

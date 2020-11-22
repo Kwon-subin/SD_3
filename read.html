@@ -3,13 +3,12 @@
     <head>
         <script language="javascript">
             var p;
-            function revise(n, ID, reply_id, f, post_id){
+            function revise(n, reply_id, f, post_id){
                 reply = document.getElementById("reply"+n);
                 reply.innerHTML = "";
                 p = document.getElementById("revisingTable"+n);
                 
                 var frmTag = "<form action='reply_revise' method=POST>"
-                frmTag += "<input type=hidden name=ID value=" + ID + ">"
                 frmTag += "<input type=hidden name=reply_id value=" + reply_id + ">"
                 frmTag += "<input type=hidden name=page value=" + f + ">"
                 frmTag += "<input type=hidden name=post_id value=" + post_id + ">"
@@ -58,13 +57,13 @@
                 <!-- 로그인한 ID와 글 작성자 ID가 같을 때 수정, 삭제 버튼 추가 -->
                 {% set post_id = reading['id'] %}
                 {% if reading['ID'] == login %}
-                    <input type="submit" onclick="postForm('revise', {'ID':'{{login}}', 'post_id':'{{post_id}}', 'page':'{{page}}'})" value="수정">
-                    <input type="submit" onclick="postForm('delete', {'ID':'{{login}}', 'post_id':'{{post_id}}', 'page':'{{page}}'})" value="삭제">
+                    <input type="submit" onclick="postForm('revise', {'post_id':'{{post_id}}', 'page':'{{page}}'})" value="수정">
+                    <input type="submit" onclick="postForm('delete', {'post_id':'{{post_id}}', 'page':'{{page}}'})" value="삭제">
                 {% endif %}
 
                 <!-- 추천, 신고 버튼 -->
-                    <input type="submit" onclick="postForm('recommend', {'ID':'{{login}}', 'post_id':'{{post_id}}', 'page':'{{page}}'})" value="추천">
-                    <input type="submit" onclick="postForm('report', {'ID':'{{login}}', 'post_id':'{{post_id}}', 'page':'{{page}}'})" value="신고">
+                    <input type="submit" onclick="postForm('recommend', {'post_id':'{{post_id}}', 'page':'{{page}}'})" value="추천">
+                    <input type="submit" onclick="postForm('report', {'post_id':'{{post_id}}', 'page':'{{page}}'})" value="신고">
                 </td>
             </tr>
 
@@ -74,7 +73,6 @@
                     <form action="/reply" method="POST">
                         <input type="hidden" name="post_id" value="{{post_id}}">
                         <input type="hidden" name="page" value="{{page}}">
-                        <input type="hidden" name="ID" value="{{login}}">
                         <input type="text" name="content">
                         <input type="submit" value="작성">
                     </form> 
@@ -91,12 +89,12 @@
 
                         <!-- 로그인한 ID와 댓글 작성자 ID가 같을 때 수정, 삭제 버튼 추가 -->
                         {% if reply['_source']['ID'] == login %}
-                            <input type="submit" onclick="revise('{{loop.index}}', '{{login}}', '{{reply_id}}', '{{page}}', '{{post_id}}')" name="revise" value="수정">
-                            <input type="submit" onclick="postForm('reply_delete', {'ID':'{{login}}', 'reply_id':'{{reply_id}}', 'page':'{{page}}', 'post_id':'{{post_id}}'})" value="삭제">
+                            <input type="submit" onclick="revise('{{loop.index}}', '{{reply_id}}', '{{page}}', '{{post_id}}')" name="revise" value="수정">
+                            <input type="submit" onclick="postForm('reply_delete', {'reply_id':'{{reply_id}}', 'page':'{{page}}', 'post_id':'{{post_id}}'})" value="삭제">
                         {% endif %}
 
                         <!-- 신고 버튼 -->
-                        <input type="submit" onclick="postForm('reply_report', {'ID':'{{login}}', 'reply_id':'{{reply_id}}', 'page':'{{page}}', 'post_id':'{{post_id}}'})" value="신고">
+                        <input type="submit" onclick="postForm('reply_report', {'reply_id':'{{reply_id}}', 'page':'{{page}}', 'post_id':'{{post_id}}'})" value="신고">
                         <!-- for 수정 -->
                         <p id="reply{{loop.index}}">{{reply['_source']['content']}}</p>
                         <p id="revisingTable{{loop.index}}"></p>
@@ -108,7 +106,7 @@
             <tr>
                 <!-- 커뮤니티로 돌아가기 -->
                 <td>
-                <input type="submit" onclick="postForm('community?page={{page}}', {'ID':'{{login}}'})" value="돌아가기">
+                <input type="submit" onclick="window.location.href='/community?page={{page}}'" value="돌아가기">
                 </td>
             </tr>
         </table>
