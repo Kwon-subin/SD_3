@@ -140,11 +140,11 @@ def login():
     if request.method == 'POST':
         user_id = request.form['user_id']
         user_password = request.form['user_password']
-        res = es.get_doc('acoount', user_id)
+        res = es.get_doc('account', user_id)
         if res == -1:
-            return render_template('register_f.html')
+            return render_template('login.html')
         else:
-            if res['PW'] == user_password:
+            if res['_source']['PW'] == user_password:
             #session['user_id'] = id
             #session['T'] = res['T']
                 return render_template('register_s.html')
@@ -152,4 +152,4 @@ def login():
                 return render_template('login.html')
 
 if __name__ == '__main__':
-    app.run(host='127.0.0.1', port=5000, debug=False)
+    app.run(host='127.0.0.1', port=5000, debug=True)
