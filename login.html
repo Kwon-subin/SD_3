@@ -1,12 +1,20 @@
-<!DOCTYPE html>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+    <%
+        String id = request.getParameter("id");
+        String password = request.getParameter("password");
+    %>
 <html>
-    <head>
-    </head>
-    <body>
-        <form action="/login" method="POST">
-            <input type="hidden" name="page" value='0'>
-            ID: <input type="text" name="ID"> 
-            <input type="submit" value="로그인">
-        </form>
-    </body>
+<head>
+</head>
+<body>
+  <div class="wrapper">
+  <form action="/login_input" method="post">
+    <h2>Please login</h2>
+    <input type="text" id="user_id" name="user_id" placeholder="Email Address"/>
+    <input type="passwd" id="user_password" name="user_password" placeholder="Password"/>
+    <button type="submit">Login</button>
+  </form>
+ </div>
+</body>
 </html>
