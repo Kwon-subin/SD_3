@@ -1,0 +1,48 @@
+<html>
+  <head>
+  </head>
+    <body>
+      <form action="/makeClass" method="post">
+        <h3 class=" ">수강생 기본정보</h3>
+        <div class="ec-base-table typeWrite">
+            <table border="1" summary="">
+                <colgroup>
+                    <col style="width:150px;">
+                    <col style="width:auto;">
+                </colgroup>
+                <tbody>
+                    <tr>
+                        <th scope="row">강좌명 <img src="//img.echosting.cafe24.com/skin/base/common/ico_required_blue.gif" alt="필수"></th>
+                        <td><input id="c_name" name="c_name" fw-filter="isFill&amp;isFill&amp;isMin[4]&amp;isMax[16]&amp;isIdentity" fw-label="아이디" fw-msg="" class="inputTypeText" placeholder="" value="" type="text"> <span id="idMsg"></span> (영문소문자/숫자, 4~16자)</td>
+                    </tr>
+
+                    <tr class="">
+                    <th scope="row">가격<img src="//img.echosting.cafe24.com/skin/base/common/ico_required_blue.gif" class="" alt="필수"></th>
+                        <td>
+                            <input type="text" name="cost" id="cost" maxlength="20">
+                        </td>
+                    </tr>
+                    <tr class=""></tr>
+                    <tr class="">
+                        <th scope="row">카테고리 <img src="//img.echosting.cafe24.com/skin/base/common/ico_required_blue.gif" class="" alt="필수"></th>
+                        <td>
+                            <input type="text" name="cat_name" id="cat_name" maxlength="20">
+                            <input type="text" name="cat_detail" id="cat_detail" maxlength="20">
+                        </td>
+                    </tr>
+                    <th scope="row">장소구분<img src="//img.echosting.cafe24.com/skin/base/common/ico_required_blue.gif" class="" alt="필수"></th>
+                        <td>
+                            <select name="m" id="m">
+                              <option value=" ">선택</option>
+                              <option value="offline">Offline</option>
+                              <option value="online">online</option>
+                            </select>
+                        </td>
+                </tbody>
+            </table>
+            <input type="submit" value="클래스 등록">
+        </div>
+
+      </form>
+    <body>
+</html>
