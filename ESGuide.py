@@ -253,6 +253,28 @@ def addToCategory(hcategory, dcategory, type, pid):
                 return -1
 
 
+def deleteFromCategory(hcategory, dcategory, type, pid):
+        try:
+                ctgry = es.get(index='category', id=hcategory)
+
+                dctgry = None
+                for dctgry in ctgry['_source']['detail']:
+                        if dctgry['name'] == dcategory:
+                                break
+                        dctgry = None
+
+                if dctgry == None:
+                        raise Exception()
+                        
+                dctgry[type].remove(pid)
+                es.index(index='category', id=ctgry['_id'], body=ctgry['_source'])
+
+                return 0
+
+        except:
+                return -1
+
+
 
 
 #테이블별 데이터 형식
