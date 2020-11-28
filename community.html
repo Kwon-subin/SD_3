@@ -30,11 +30,25 @@
         <table>
         <!-- 로그인한 ID 확인용 -->
         <tr><td>안녕하세요, {{ID}} 님</td></tr>
+        
+        <!-- 카테고리 선택 -->
+        <tr><td>
+            <form action="/community" method="GET">
+                <input type="hidden" name="page" value="0">
+                <select name="category">
+                    <option value="{{category}}" selected disabled>{{category}}</option>
+                    <option value="test1">test1</option>
+                    <option value="test2">test2</option>
+                </select>
+                <input type="submit" value="이동">
+            </form>
+        </td></tr>
 
         <!-- 페이지의 Post 정보 출력 -->
             {% for post in posts %}
                 <tr><td>
                         <form action="/read" method="POST">
+                            <input type="hidden" name="category" value="{{category}}">
                             <input type="hidden" name="post_id" value="{{post['_id']}}">
                             <input type="hidden" name="page" value="{{page}}">
                             <input type="submit" value="{{post['_source']['title']}}">
@@ -44,10 +58,10 @@
             <!-- 페이지 이동 -->
             <tr>
                 <td>
-                    <input type="submit" onclick="postForm('backpage', {'page':'{{page}}'})" value="이전 페이지">
+                    <input type="submit" onclick="postForm('backpage', {'page':'{{page}}', 'category':'{{category}}'})" value="이전 페이지">
                 </td>
                 <td>
-                    <input type="submit" onclick="postForm('nextpage', {'page':'{{page}}'})" value="다음 페이지">
+                    <input type="submit" onclick="postForm('nextpage', {'page':'{{page}}', 'category':'{{category}}'})" value="다음 페이지">
                 </td>
             </tr><br>
 
