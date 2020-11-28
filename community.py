@@ -31,7 +31,7 @@ def login():
 
     cb.set_reading_size(READING_SIZE)
 
-    return redirect(url_for('community', page = 0))
+    return redirect(url_for('community', category = 'None', page = 0))
 
 
 
@@ -41,26 +41,29 @@ def login():
 @app.route('/community', methods=['GET'])
 def community():
     ID = session.get('user_id')
+    category = request.args.get('category')
     page = int(request.args.get('page'))
-    docs, page = cb.show(page)
+    docs, page = cb.show(category, page)
     
-    return render_template('community.html', posts = docs, ID = ID, page = page)
+    return render_template('community.html', posts = docs, ID = ID, category = category, page = page)
 
 
 @app.route('/nextpage', methods=['POST'])
 def nextpage():
+    category = request.form['category']
     page = int(request.form['page'])
     page = cb.next_page(page)
 
-    return redirect(url_for('community', page = page))
+    return redirect(url_for('community', category = category, page = page))
 
 
 @app.route('/backpage', methods=['POST'])
 def backpage():
+    category = request.form['category']
     page = int(request.form['page'])
     page = cb.back_page(page)
 
-    return redirect(url_for('community', page = page))
+    return redirect(url_for('community', category = category, page = page))
 
 
 
@@ -79,11 +82,12 @@ def posting():
     title = request.form['title']
     content = request.form['content']
     hashtags = request.form['hashtags']
+    category = request.form['category']
     
-    cb.post(ID, title, content, hashtags)
+    cb.post(ID, title, content, hashtags, category)
 
 
-    return redirect(url_for('community', page = 0))
+    return redirect(url_for('community', category = category, page = 0))
 
 
 
@@ -95,10 +99,11 @@ def read():
     ID = session.get('user_id')
     post_id = request.form['post_id']
     page = int(request.form['page'])
+    category = request.form['category']
     post = cb.read(post_id)
 
 
-    return render_template('read.html', reading = post, login = ID, page = page)
+    return render_template('read.html', reading = post, login = ID, page = page, category = category)
     
 
 
@@ -107,7 +112,6 @@ def read():
 def recommend():
     post_id = request.form['post_id']
     no = cb.recommend(post_id)
-    page = int(request.form['page'])
 
     return redirect(url_for('read'), code = 307)
 
@@ -118,7 +122,6 @@ def recommend():
 def report():
     post_id = request.form['post_id']
     no = cb.report(post_id)
-    page = int(request.form['page'])
 
     return redirect(url_for('read'), code = 307)
 
@@ -130,9 +133,10 @@ def revise():
     ID = session.get('user_id')
     post_id = request.form['post_id']
     page = int(request.form['page'])
+    category = request.form['category']
     post = cb.read(post_id)
 
-    return render_template('revise.html', ID = ID, reading = post, page = page, post_id = post_id)
+    return render_template('revise.html', ID = ID, reading = post, page = page, post_id = post_id, category = category)
 
 
 
@@ -144,8 +148,10 @@ def revising():
     title = request.form['title']
     content = request.form['content']
     hashtags = request.form['hashtags']
+    originalC = request.form['originalC']
+    category = request.form['category']
     
-    no = cb.revise(post_id, title, content, hashtags)
+    no = cb.revise(post_id, title, content, hashtags, originalC, category)
 
 
     return redirect(url_for('read'), code = 307)
@@ -156,10 +162,11 @@ def revising():
 @app.route('/delete', methods=['POST'])
 def delete():
     post_id = request.form['post_id']
+    category = request.form['category']
     page = int(request.form['page'])
-    cb.delete(post_id)
+    cb.delete(post_id, category)
 
-    return redirect(url_for('community', page = page))
+    return redirect(url_for('community', category = category, page = page))
 
 
 
@@ -232,10 +239,11 @@ def search():
         docs = {}
 
 
-    return render_template('community.html', posts = docs, page = 0, ID = ID)
+    return render_template('community.html', category = 'None', posts = docs, page = 0, ID = ID)
 
 
 
 
 if __name__ == '__main__':
     app.run()
+    #app.run(host = '0.0.0.0')

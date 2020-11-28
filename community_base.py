@@ -49,17 +49,36 @@ def get_datetime(): #현재시간 YYYYMMDDHHMM 형식 반환
 
 
 
-def show(f): #게시판 리턴 f=from
+def show(category, f): #게시판 리턴 f=from
     if f < 0:
         f += READING_SIZE
 
+    ctgry = es.get_doc('category', category)
+    post_ids_ = ctgry['_source']['detail']
 
-    docs = es.get_idx_by_size('post', [{'_id':'desc'}], f, READING_SIZE)
-
-    doc_len = len(docs)
-    if doc_len == 0: #마지막 페이지 초과
+    post_ids = None
+    for post_ids in post_ids_:
+        if post_ids['name'] == 'None':
+            break
+    post_ids = post_ids['post']
+    if len(post_ids) == 0:
         f -= READING_SIZE
-        docs = es.get_idx_by_size('post', [{'_id':'desc'}], f, READING_SIZE)
+        return [{}, f]
+    
+    match = []
+    for _id in post_ids:
+        match.append({'match' : {'id':_id}})
+    body = {
+        'from':f,
+        'size':READING_SIZE,
+        'sort':{'_id':'desc'},
+        'query':{
+            'bool':{
+                'should':match
+                }
+            }
+        }
+    docs = es.search_doc2('post', body)
     
 
     return [docs, f]
@@ -105,7 +124,7 @@ def read(id): #id를 받아 해당 id의 글을 읽음
 
 
 
-def post(ID, title, content, hashs):
+def post(ID, title, content, hashs, category):
     time = get_datetime()
 
     #hashs = re.sub(' ', '', hashs)
@@ -125,7 +144,11 @@ def post(ID, title, content, hashs):
         'report' : 0,
         'hash' : hashs
     }
-    print(post)
+    r = es.addToCategory(category, 'None', 'post', POST_NUM)
+    if r == -1:
+        print('error!')
+        return -1
+
     es.insert_doc('post', POST_NUM, post)
     pn = int(POST_NUM) + 1
     if(pn > 9999):
@@ -139,14 +162,16 @@ def post(ID, title, content, hashs):
 
 
 
-def revise(id, title, content, hashs):
+def revise(id, title, content, hashs, originalC, category):
     doc = es.get_doc('post', id)
     doc['_source']['title'] = title
     doc['_source']['content'] = content
     time = get_datetime()
     doc['_source']['time'] = time
     doc['_source']['hash'] = hashs
-
+    
+    es.deleteFromCategory(originalC, 'None', 'post', doc['_id'])
+    es.addToCategory(category, 'None', 'post', doc['_id'])
     es.insert_doc('post', doc['_id'], doc['_source'])
 
 
@@ -155,9 +180,9 @@ def revise(id, title, content, hashs):
 
 
 
-def delete(id):
+def delete(id, category):
     es.delete_doc('post', id)
-
+    es.deleteFromCategory(category, 'None', 'post', id)
 
     return id
 
@@ -245,7 +270,6 @@ def reply_delete(reply_id):
 
 
 def search(condition):
-    cond = {'hash' : condition}
     body = {
         'sort':{'_id':'desc'},
         'query':{
