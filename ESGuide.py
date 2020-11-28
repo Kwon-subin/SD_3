@@ -23,6 +23,39 @@ for idx in idxs:
         if not es.indices.exists(index=idx):
                 es.indices.create(index=idx)
 
+#필요한 카테고리 생성
+CATEGORIES = [{
+        'name' : 'None',
+        'detail' : [{
+                'name' : 'None',
+                'class' : [],
+                'post' : []
+        }]
+        },
+        {
+        'name' : 'test1',
+        'detail' : [{
+                'name' : 'None',
+                'class' : [],
+                'post' : []
+        }]
+        },
+        {
+        'name' : 'test2',
+        'detail' : [{
+                'name' : 'None',
+                'class' : [],
+                'post' : []
+        }]
+        }
+]
+for ctgry in CATEGORIES:
+        es.index(index = 'category', id=ctgry['name'], body=ctgry)
+
+es.indices.refresh(index = 'category')
+
+
+
 
 #index 가져오기
 def get_idx(idx):
@@ -81,6 +114,7 @@ def insert_doc(idx, pid, doc):
                 return -1
 
         es.indices.refresh(index=idx)
+
         return 0
 
 
@@ -129,6 +163,16 @@ def search_doc(idx, cond): #cond는 tuple 형태
                 return res['hits']['hits']
         except:
                 return -1
+
+
+#body를 넣어 document 찾기
+def search_doc2(idx, body):
+        try:
+                docs = es.search(index=idx, body=body)
+                return docs['hits']['hits']
+        except:
+                return -1
+
 
 
 #조건으로 sorted document 찾기
@@ -186,6 +230,31 @@ def delete_doc(idx, pid):
         return 0
 
 
+#category에 추가
+def addToCategory(hcategory, dcategory, type, pid):
+        try:
+                ctgry = es.get(index='category', id=hcategory)
+
+                dctgry = None
+                for dctgry in ctgry['_source']['detail']:
+                        if dctgry['name'] == dcategory:
+                                break
+                        dctgry = None
+
+                if dctgry == None:
+                        raise Exception()
+                        
+                dctgry[type].append(pid)
+                es.index(index='category', id=ctgry['_id'], body=ctgry['_source'])
+
+                return 0
+
+        except:
+                return -1
+
+
+
+
 #테이블별 데이터 형식
 #pid는 모두 String 형태로 통일해주세요!
 #★데이터 형식이 반드시 같아야 doc 저장이 됩니다★
@@ -217,7 +286,11 @@ if __name__=='__main__':
 
         category = { #pid = 00, 01 ...
                 'name' : 'String', #huge category name
-                'detail' : [] #detail category names
+                'detail' : [{
+                        'name' : 'String',
+                        'class' : [], #이 카테고리에 포함된 class id들
+                        'post' : [] #이 카테고리에 포함된 post id들
+                }] #detail category names
                 }
         insert_doc('category', 'guide', category)
 
