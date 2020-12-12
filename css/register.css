@@ -1,0 +1,163 @@
+﻿body
+{
+}
+/*Start Global Style*/
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    background: #e9ebee;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    font-family: sans-serif;
+}
+
+.container {
+    width: 80%;
+    margin: auto;
+    padding: 20px;
+    height: 100%
+}
+
+.login, .register {
+    width: 50%
+}
+
+/*Start Login Style*/
+.register {
+    float: right;
+    background-color: #fafafa;
+    height: 100%;
+    border-radius: 10px 0 0 10px;
+    text-align: center;
+    padding-top: 100px;
+}
+
+    .login h1 {
+        margin-bottom: 40px;
+        font-size: 2.5em;
+    }
+
+input[type="text"], input[type="password"] {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 30px;
+    border: none;
+    background-color: #eeeeef;
+}
+
+input[type="checkbox"] {
+    float: left;
+    margin-right: 5px;
+}
+
+.register span {
+    float: left
+}
+
+.register a {
+    float: left;
+    text-decoration: none;
+    color: #000;
+    transition: 0.3s all ease-in-out;
+}
+
+    .regsiter a:hover {
+        color: #9526a9;
+        font-weight: bold
+    }
+
+.register button {
+    width: 100%;
+    margin: 30px 0;
+    padding: 10px;
+    border: none;
+    background-color: #9526a9;
+    color: #fff;
+    font-size: 20px;
+    cursor: pointer;
+    transition: 0.3s all ease-in-out;
+}
+
+    .register button:hover {
+        width: 97%;
+        font-size: 22px;
+        border-radius: 5px;
+    }
+
+.register hr {
+    width: 30%;
+    display: inline-block
+}
+
+.register p {
+    display: inline-block;
+    margin: 0px 10px 30px;
+}
+
+.register ul {
+    list-style: none;
+    margin-bottom: 40px;
+}
+
+    .register ul li {
+        display: inline-block;
+        margin-right: 30px;
+        cursor: pointer;
+    }
+
+        .register ul li:hover {
+            opacity: 0.6
+        }
+
+        .register ul li:last-child {
+            margin-right: 0
+        }
+
+.register .copyright {
+    display: inline-block;
+    float: none;
+}
+/*Start Register Style*/
+.login {
+    float: left;
+    background-image: linear-gradient(135deg, #23212f 5%, #9526a9 95%);
+    height: 100%;
+    color: #fff;
+    border-radius: 0 10px 10px 0;
+    text-align: center;
+    padding: 100px 0;
+}
+
+    .login h2 {
+        margin: 30px 0;
+        font-size: 50px;
+        letter-spacing: 3px
+    }
+
+    .login p {
+        font-size: 18px;
+        margin-bottom: 30px;
+    }
+
+    .login button {
+        background-color: transparent;
+        border: 1px solid #FFF;
+        border-radius: 20px;
+        padding: 10px 20px;
+        color: #fff;
+        font-size: 20px;
+        text-transform: uppercase;
+        transition: 0.2s all ease-in-out;
+    }
+
+        .login button:hover {
+            color: #9526a9;
+            background-color: #fff;
+            cursor: pointer;
+        }
