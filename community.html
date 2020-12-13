@@ -36,25 +36,44 @@
             <form action="/community" method="GET">
                 <input type="hidden" name="page" value="0">
                 <select name="category">
-                    <option value="{{category}}" selected disabled>{{category}}</option>
-                    <option value="test1">test1</option>
-                    <option value="test2">test2</option>
+                    {% for ctgry in categories %}
+                    {% if ctgry == category %}
+                        <option value="{{ctgry}}" selected> {{ctgry}} </option>
+                    {% else %}
+                        <option value="{{ctgry}}"> {{ctgry}} </option>
+                    {% endif %}
+                    {% endfor %}
                 </select>
                 <input type="submit" value="이동">
             </form>
         </td></tr>
 
         <!-- 페이지의 Post 정보 출력 -->
-            {% for post in posts %}
-                <tr><td>
-                        <form action="/read" method="POST">
-                            <input type="hidden" name="category" value="{{category}}">
-                            <input type="hidden" name="post_id" value="{{post['_id']}}">
-                            <input type="hidden" name="page" value="{{page}}">
-                            <input type="submit" value="{{post['_source']['title']}}">
-                        </form>
-                </td></tr>
-            {% endfor %}
+        {% for hot in hots %}
+        <tr bgcolor="gray">
+            <td>
+                <form action="/read" method="POST">
+                    <input type="hidden" name="category" value="{{category}}">
+                    <input type="hidden" name="post_id" value="{{hot['_id']}}">
+                    <input type="hidden" name="page" value="{{page}}">
+                    <input type="submit" value="{{hot['_source']['title']}}">
+                </form>
+            </td>
+        </tr>
+        {% endfor %}
+        {% for post in posts %}
+        <tr>
+            <td>
+                <form action="/read" method="POST">
+                    <input type="hidden" name="category" value="{{category}}">
+                    <input type="hidden" name="post_id" value="{{post['_id']}}">
+                    <input type="hidden" name="page" value="{{page}}">
+                    <input type="submit" value="{{post['_source']['title']}}">
+                </form>
+            </td>
+        </tr>
+        {% endfor %}
+
             <!-- 페이지 이동 -->
             <tr>
                 <td>
@@ -68,7 +87,7 @@
             <!-- Post 버튼 -->
             <tr>
                 <td>
-                <input type="submit" onclick="window.location.href='/post'" value="작성">
+                <input type="submit" onclick="postForm('post',{'category':'{{category}}'})" value="작성">
                 </td>
             </tr><br>
 

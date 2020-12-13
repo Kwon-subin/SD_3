@@ -12,9 +12,13 @@
             키워드: <input type="text" name="hashtags" value="{{reading['hash']}}"> <br>
             카테고리:
             <select name="category">
-                <option value="{{category}}" selected disable> {{category}} </option>
-                <option value="test1"> test1 </option>
-                <option value="test2"> test2 </option>
+                {% for ctgry in categories %}
+                {% if ctgry == category %}
+                    <option value="{{ctgry}}" selected> {{ctgry}} </option>
+                {% else %}
+                    <option value="{{ctgry}}"> {{ctgry}} </option>
+                {% endif %}
+                {% endfor %}
             </select>
             <input type="submit" value="작성">
         </form>
