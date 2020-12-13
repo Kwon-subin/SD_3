@@ -7,7 +7,7 @@ from datetime import datetime
 
 
 POST_NUM = "{:>04d}".format(0) #id로 사용
-READING_SIZE = 3 #한 페이지에 읽을 게시글 수, 기본값 3
+READING_SIZE = 10 #한 페이지에 읽을 게시글 수
 
 
 
@@ -34,13 +34,6 @@ def update_pn():
 
 
 
-def set_reading_size(reading_size): #READING_SIZE 세팅
-    global READING_SIZE
-    READING_SIZE = reading_size
-
-
-
-
 def get_datetime(): #현재시간 YYYYMMDDHHMM 형식 반환
     t = datetime.now()
     time = "{:>04d}-{:>02d}-{:>02d}/{:>02d}:{:>02d}".format(t.year, t.month, t.day, t.hour, t.minute)
@@ -53,35 +46,61 @@ def show(category, f): #게시판 리턴 f=from
     if f < 0:
         f += READING_SIZE
 
-    ctgry = es.get_doc('category', category)
-    post_ids_ = ctgry['_source']['detail']
+    try:
+        ctgry = es.get_doc('category', category)
+        post_ids_ = ctgry['_source']['detail']
 
-    post_ids = None
-    for post_ids in post_ids_:
-        if post_ids['name'] == 'None':
-            break
-    post_ids = post_ids['post']
-    if len(post_ids) == 0:
-        f -= READING_SIZE
-        return [{}, f]
-    
-    match = []
-    for _id in post_ids:
-        match.append({'match' : {'id':_id}})
-    body = {
-        'from':f,
-        'size':READING_SIZE,
-        'sort':{'_id':'desc'},
-        'query':{
-            'bool':{
-                'should':match
+        post_ids = None
+        for post_ids in post_ids_:
+            if post_ids['name'] == 'None':
+                break
+        post_ids = post_ids['post']
+
+        if len(post_ids) == 0:
+            f -= READING_SIZE
+        
+        match = []
+        for _id in post_ids:
+            match.append({'match' : {'id':_id}})
+
+        body = {
+            'from':f,
+            'size':READING_SIZE,
+            'sort':{'_id':'desc'},
+            'query':{
+                'bool':{
+                    'should':match
+                    }
                 }
             }
+        docs = es.search_doc2('post', body)
+        if len(docs) == 0:
+            f -= READING_SIZE
+            body['from'] = f
+            docs = es.search_doc2('post', body)
+
+        body_ = {
+            'from':0,
+            'size':3,
+            'sort':{'recommend':'desc'},
+            'query':{
+                'bool':{
+                    'should':match
+                    }
+                }
         }
-    docs = es.search_doc2('post', body)
+        hots = es.search_doc2('post', body_)
+
+    except:
+        docs = es.get_idx_by_size('post', {'_id':'desc'}, f, READING_SIZE)
+        if len(docs) == 0:
+            f -= READING_SIZE
+            docs = es.get_idx_by_size('post', {'_id':'desc'}, f, READING_SIZE)
+
+        hots = es.get_idx_by_size('post', {'recommend':'desc'}, 0, 3)
     
 
-    return [docs, f]
+    return [docs, hots, f]
 
 
 def next_page(f):

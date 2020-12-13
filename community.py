@@ -13,7 +13,7 @@ for i in range(10):
 app = Flask(__name__)
 app.secret_key = key
 
-READING_SIZE = 3
+CATEGORIES = ['test1', 'test2']
 
 
 
@@ -24,12 +24,11 @@ READING_SIZE = 3
 def main():
     return render_template('login.html')
 
+
 @app.route('/login', methods=['POST'])
 def login():
     ID = request.form['ID']
     session['user_id'] = ID
-
-    cb.set_reading_size(READING_SIZE)
 
     return redirect(url_for('community', category = 'None', page = 0))
 
@@ -43,9 +42,9 @@ def community():
     ID = session.get('user_id')
     category = request.args.get('category')
     page = int(request.args.get('page'))
-    docs, page = cb.show(category, page)
-    
-    return render_template('community.html', posts = docs, ID = ID, category = category, page = page)
+    docs, hots, page = cb.show(category, page)
+
+    return render_template('community.html', categories = CATEGORIES, hots = hots, posts = docs, ID = ID, category = category, page = page)
 
 
 @app.route('/nextpage', methods=['POST'])
@@ -70,11 +69,12 @@ def backpage():
 
 ########### 글쓰기 ###########
 
-@app.route('/post')
+@app.route('/post', methods=['POST'])
 def post():
     ID = session.get('user_id')
+    category = request.form['category']
 
-    return render_template('post.html', ID = ID)
+    return render_template('post.html', ID = ID, categories = CATEGORIES, category = category)
 
 @app.route('/posting', methods=['POST'])
 def posting():
@@ -136,7 +136,7 @@ def revise():
     category = request.form['category']
     post = cb.read(post_id)
 
-    return render_template('revise.html', ID = ID, reading = post, page = page, post_id = post_id, category = category)
+    return render_template('revise.html', ID = ID, reading = post, page = page, post_id = post_id, categories = CATEGORIES, category = category)
 
 
 
@@ -239,7 +239,7 @@ def search():
         docs = {}
 
 
-    return render_template('community.html', category = 'None', posts = docs, page = 0, ID = ID)
+    return render_template('community.html', categories = CATEGORIES, category = 'None', posts = docs, page = 0, ID = ID)
 
 
 
