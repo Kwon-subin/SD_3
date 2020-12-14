@@ -12,8 +12,8 @@
         <div class="login">
             <div class="container">
                 <h1>Log in</h1>
-                <form action="/login" method="post">
-                    <input type="text" id="user_id" name="ID" placeholder="ID">
+                <form action="/login_input" method="post">
+                    <input type="text" id="user_id" name="user_id" placeholder="ID">
                     <input type="password" id="user_password" name="user_password" placeholder="Password"><br>
                     <button type="submit">log in</button>
                 </form>
@@ -26,7 +26,9 @@
                 <i class="fas fa-user-plus fa-5x"></i>
                 <h2>Hello,friend!</h2>
                 <p>Enter your personal details and start journey with us</p>
-                <button>Register <i class="fas fa-arrow-circle-right"></i></button>
+                <form action="/choose/student" method="get">
+                    <button>Register <i class="fas fa-arrow-circle-right"></i></button>
+                </form>
             </div>
         </div>
     </div>
