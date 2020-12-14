@@ -1,0 +1,100 @@
+<!DOCTYPE HTML>
+
+<html>
+	<head>
+		<title>Flask Template</title>
+    <style>
+
+      
+      form {
+        background-color: gray;
+        max-width : 1000px; 
+        margin: 0 auto;
+
+        height : 300px;
+
+        display: flex;
+
+        flex-direction: row;
+        justify-content: center;
+        align-items: center;
+      }
+
+      input {
+        font-size: 28px;
+        margin-top: 20px;
+      }
+
+
+
+      small{
+        text-decoration:none;
+        color : white;
+        text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
+        font-size : 30px;
+        font-weight : 700;
+        
+        border: 5px red;
+
+        display : flex;
+        padding : 50px;
+        margin : 20px;    
+      }
+      
+
+      .a{
+        background-image : url('static/dance.jpg');
+        background-size: cover;
+      }
+      .b{
+        background-image : url('static/cook.jpg');
+        background-size: cover;
+      }
+      .c{
+        background-image : url('static/art.jpg');
+        background-size: cover;
+      }
+      .d{
+        background-image : url('static/beauty.jpg');
+        background-size: cover;
+      }
+        a:link { color: red; text-decoration: none;}
+        a:visited { color: black; text-decoration: none;}
+        a:hover { color: blue; text-decoration: underline;}
+
+      
+
+    </style>
+	</head>
+
+	<body>
+
+    <form>
+      <a href = '/catasmall1'>         
+          <small class ="a">
+            체험
+          </small>
+      </a>
+
+      <a href = '/catasmall2'>
+          <small class = "b">
+            요리
+          </small>
+      </a>
+
+      <a href = '/catasmall3'>
+          <small class = "c">
+            미술
+          </small>
+      </a>     
+
+      <a href = '/catasmall4'>
+          <small class = "d">
+            뷰티
+          </small>
+      </a>  
+
+    </form>
+    </div>
+	</body>
+</html>
