@@ -18,18 +18,10 @@ app.secret_key = "SD_3"
 
 @app.route('/')
 def main():
-    return render_template("register_login_choose.html")
-
-@app.route('/choose/register', methods=['get'])
-def choose_register():
-    return render_template("register_choose.html")
-
-@app.route('/choose/login', methods=['get'])
-def choose_login():
     return render_template("login.html")
 
 @app.route('/choose/student', methods=['get'])
-def choose_student():
+def choose_register():
     return render_template("register_student.html")
 
 @app.route('/choose/teacher', methods=['get'])
