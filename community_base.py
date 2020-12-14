@@ -57,7 +57,7 @@ def show(category, f): #게시판 리턴 f=from
         post_ids = post_ids['post']
 
         if len(post_ids) == 0:
-            f -= READING_SIZE
+            return [{}, {}, 0]
         
         match = []
         for _id in post_ids:
@@ -72,8 +72,9 @@ def show(category, f): #게시판 리턴 f=from
                     'should':match
                     }
                 }
-            }
+            } 
         docs = es.search_doc2('post', body)
+
         if len(docs) == 0:
             f -= READING_SIZE
             body['from'] = f
@@ -85,7 +86,12 @@ def show(category, f): #게시판 리턴 f=from
             'sort':{'recommend':'desc'},
             'query':{
                 'bool':{
-                    'should':match
+                    'should':match,
+                    'must_not':{
+                        'match':{
+                            'recommend': 0
+                        }
+                    }
                     }
                 }
         }
@@ -98,6 +104,9 @@ def show(category, f): #게시판 리턴 f=from
             docs = es.get_idx_by_size('post', {'_id':'desc'}, f, READING_SIZE)
 
         hots = es.get_idx_by_size('post', {'recommend':'desc'}, 0, 3)
+        for i, hot in enumerate(hots[:]):
+            if hot['_source']['recommend'] == 0:
+                del hots[i]
     
 
     return [docs, hots, f]
