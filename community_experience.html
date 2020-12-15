@@ -1,5 +1,4 @@
-﻿
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -46,6 +45,10 @@
 </head>
 <body id="page-top">
     <!-- Navigation-->
+    <form action="/community" method="GET">
+        <input type="hidden" name="page" value="0" />
+        <input type="hidden" name="category" value="experience" />
+    </form>
     <nav class="navbar navbar-expand-lg bg-secondary text-uppercase fixed-top" id="mainNav">
         <div class="container">
             <a class="navbar-brand js-scroll-trigger" href="#page-top">One-Day Class Platform</a>
@@ -91,7 +94,7 @@
                         <td data-title="작성자">{{hot['_source']['ID']}}</td>
                         <td data-title="제목">
                             <form action="/read" method="POST">
-                                <input type="hidden" name="category" value="experience"> <!--카테고리 이름 나중에 수정 요망!-->
+                                <input type="hidden" name="category" value="{{category}}">
                                 <input type="hidden" name="post_id" value="{{hot['_id']}}">
                                 <input type="hidden" name="page" value="{{page}}">
                                 <input type="submit" style="background-color:white; border:none;border-right:0px; border-top:0px; boder-left:0px; boder-bottom:0px;" value="{{hot['_source']['title']}}">
@@ -107,7 +110,7 @@
             </div>
                 <div style="float:right;">
                     </br>
-                    <input class="btn-post" type="submit" onclick="postForm('post',{'category':'experience'})" value="작성">
+                    <input class="btn-post" type="submit" onclick="postForm('post',{'category':'{{category}}'})" value="작성">
                 </div>
             <table id="table" class="table table-hover table-mc-light-blue">
                 <thead>
@@ -123,7 +126,7 @@
                         <td data-title="작성자">{{post['_source']['ID']}}</td>
                         <td data-title="제목">
                             <form action="/read" method="POST">
-                                <input type="hidden" name="category" value="experience"> <!--카테고리 이름 나중에 수정 요망!-->
+                                <input type="hidden" name="category" value="{{category}}">
                                 <input type="hidden" name="post_id" value="{{post['_id']}}">
                                 <input type="hidden" name="page" value="{{page}}">
                                 <input style="background-color:white; border:none;border-right:0px; border-top:0px; boder-left:0px; boder-bottom:0px;" type="submit" value="{{post['_source']['title']}}">
@@ -135,10 +138,10 @@
                 </tbody>
             </table>
             <div style="float:left">
-                <input class="btn-page" type="submit" onclick="postForm('backpage', {'page':'{{page}}', 'category':'experience'})" value="<"><!--카테고리명 수정요망-->
+                <input class="btn-page" type="submit" onclick="postForm('backpage', {'page':'{{page}}', 'category':'{{category}}'})" value="<">
             </div>
             <div style="float:right; display:inline-block">
-                <input class="btn-page" type="submit" onclick="postForm('nextpage', {'page':'{{page}}', 'category':'experience'})" value=">"><!--카테고리명 수정요망-->
+                <input class="btn-page" type="submit" onclick="postForm('nextpage', {'page':'{{page}}', 'category':'{{category}}'})" value=">">
             </div>
             </br></br>
             
