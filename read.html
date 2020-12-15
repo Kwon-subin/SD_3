@@ -1,13 +1,14 @@
+
 <!DOCTYPE html>
-<html>
-    <head>
-        <script language="javascript">
+<html lang="en">
+<head>
+    <script language="javascript">
             var p;
             function revise(n, reply_id, f, post_id, category){
                 reply = document.getElementById("reply"+n);
                 reply.innerHTML = "";
                 p = document.getElementById("revisingTable"+n);
-                
+
                 var frmTag = "<form action='reply_revise' method=POST>";
                 frmTag += "<input type=hidden name=reply_id value=" + reply_id + ">";
                 frmTag += "<input type=hidden name=page value=" + f + ">";
@@ -32,7 +33,7 @@
                         hiddenField.setAttribute('type', 'hidden');
                         hiddenField.setAttribute('name', key);
                         hiddenField.setAttribute('value', params[key]);
-                    
+
                         form.appendChild(hiddenField);
                     }
                 }
@@ -40,77 +41,165 @@
                 document.body.appendChild(form);
                 form.submit();
             }
-        </script>
-    </head>
-    <body>
-        <table>
-            <tr>
-                <td>
-                    제목: {{reading['title']}}<br>
-                    {{reading['content']}}<br><br>
-                    {{reading['ID']}}<br>
-                    {{reading['time']}}<br>
-                    {{reading['recommend']}}  {{reading['report']}}<br>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                <!-- 로그인한 ID와 글 작성자 ID가 같을 때 수정, 삭제 버튼 추가 -->
-                {% set post_id = reading['id'] %}
-                {% if reading['ID'] == login %}
-                    <input type="submit" onclick="postForm('revise', {'post_id':'{{post_id}}', 'page':'{{page}}', 'category':'{{category}}'})" value="수정">
-                    <input type="submit" onclick="postForm('delete', {'post_id':'{{post_id}}', 'page':'{{page}}', 'category':'{{category}}'})" value="삭제">
-                {% endif %}
+    </script>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <meta name="description" content="" />
+    <meta name="author" content="" />
+    <title>Community_Posting</title>
+    <!-- Favicon-->
+    <link rel="icon" type="image/x-icon" href="assets/img/favicon.ico" />
+    <!-- Font Awesome icons (free version)-->
+    <script src="https://use.fontawesome.com/releases/v5.15.1/js/all.js" crossorigin="anonymous"></script>
+    <!-- Google fonts-->
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet" type="text/css" />
+    <link href="https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic" rel="stylesheet" type="text/css" />
+    <!-- Core theme CSS (includes Bootstrap)-->
+    <link href="css/main.css" rel="stylesheet" />
+    <link rel="stylesheet" type="text/css" href="css/community.css">
+    <link rel="stylesheet" type="text/css" href="css/editor.css">
 
-                <!-- 추천, 신고 버튼 -->
-                    <input type="submit" onclick="postForm('recommend', {'post_id':'{{post_id}}', 'page':'{{page}}', 'category':'{{category}}'})" value="추천">
-                    <input type="submit" onclick="postForm('report', {'post_id':'{{post_id}}', 'page':'{{page}}', 'category':'{{category}}'})" value="신고">
-                </td>
-            </tr>
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Jua&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Do+Hyeon&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Nanum+Gothic+Coding&display=swap" rel="stylesheet">
+</head>
+<body id="page-top">
+    <!-- Navigation-->
+    <nav class="navbar navbar-expand-lg bg-secondary text-uppercase fixed-top" id="mainNav">
+        <div class="container">
+            <a class="navbar-brand js-scroll-trigger" href="#page-top">One-Day Class Platform</a>
+            <button class="navbar-toggler navbar-toggler-right text-uppercase font-weight-bold bg-primary text-white rounded" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+                Menu
+                <i class="fas fa-bars"></i>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarResponsive">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded" href="#" onclick="location.href='main_class.html'">Class</a></li>
+                    <li class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded" href="#" onclick="location.href='main_community.html'">Community</a></li>
+                    <li class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded" href="#" onclick="location.href='login.html'">Logout</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <!-- Masthead-->
+    </br></br></br>
 
-            <tr>
-                <!-- 댓글 작성 -->
-                <td>
-                    <form action="/reply" method="POST">
-                        <input type="hidden" name="post_id" value="{{post_id}}">
-                        <input type="hidden" name="page" value="{{page}}">
-                        <input type="hidden" name="category" value="{{category}}">
-                        <input type="text" name="content">
-                        <input type="submit" value="작성">
-                    </form> 
-                </td>
-            </tr>
-
-            {% if reading['replys'] != -1 %}
-                <!-- 댓글 출력 -->
-                {% for reply in reading['replys'] %}
-                <tr>
-                    <td>
-                        {% set reply_id = reply['_id'] %}
-                        {{reply['_source']['ID']}} {{reply['_source']['time']}} {{reply['_source']['report']}}
-
-                        <!-- 로그인한 ID와 댓글 작성자 ID가 같을 때 수정, 삭제 버튼 추가 -->
-                        {% if reply['_source']['ID'] == login %}
-                            <input type="submit" onclick="revise('{{loop.index}}', '{{reply_id}}', '{{page}}', '{{post_id}}', '{{category}}')" name="revise" value="수정">
-                            <input type="submit" onclick="postForm('reply_delete', {'reply_id':'{{reply_id}}', 'page':'{{page}}', 'post_id':'{{post_id}}', 'category':'{{category}}'})" value="삭제">
-                        {% endif %}
-
-                        <!-- 신고 버튼 -->
-                        <input type="submit" onclick="postForm('reply_report', {'reply_id':'{{reply_id}}', 'page':'{{page}}', 'post_id':'{{post_id}}', 'category':'{{category}}'})" value="신고">
-                        <!-- for 수정 -->
-                        <p id="reply{{loop.index}}">{{reply['_source']['content']}}</p>
-                        <p id="revisingTable{{loop.index}}"></p>
-                    </td>
-                </tr>
-                {% endfor %}
+    <!-- Portfolio Section-->
+    <section class="page-section portfolio" id="portfolio">
+        <div class="container">
+            <!-- Portfolio Section Heading-->
+            <h2 style="    font-family: 'Jua', sans-serif;" class="page-section-heading text-center text-uppercase text-secondary mb-0">{{reading['title']}} - {{reading['ID']}}</h2>
+            <!-- Icon Divider-->
+            <div class="divider-custom">
+                <div class="divider-custom-line"></div>
+                <div class="divider-custom-icon"><i class="fas fa-star"></i></div>
+                <div class="divider-custom-line"></div>
+            </div>
+            <p style="font-family: 'Nanum Gothic Coding', monospace; font-size:20px;">{{reading['content']}}</p>
+            <p style="text-align:center; font-family: 'Jua', sans-serif;">
+                {{reading['time']}}<br>
+                {{reading['recommend']}}  {{reading['report']}}<br>
+            </p>
+            {% set post_id = reading['id'] %}
+            {% if reading['ID'] == login %}
+            <div style="float:right">
+                <input type="submit" class="btn-post" onclick="postForm('revise', {'post_id':'{{post_id}}', 'page':'{{page}}', 'category':'{{category}}'})" value="수정">
+                <input type="submit" class="btn-post" onclick="postForm('delete', {'post_id':'{{post_id}}', 'page':'{{page}}', 'category':'{{category}}'})" value="삭제">
+            </div>
             {% endif %}
+            </br>
+            </br>
+            {% set post_id = reading['id'] %}
+            {% if reading['ID'] != login %}
+            <div style="float:right">
+                <input type="submit" class="btn-post" onclick="postForm('recommend', {'post_id':'{{post_id}}', 'page':'{{page}}', 'category':'{{category}}'})" value="추천">
+                <input type="submit" class="btn-post" onclick="postForm('report', {'post_id':'{{post_id}}', 'page':'{{page}}', 'category':'{{category}}'})" value="신고">
+            </div>
+            {% endif %}
+            <div class="divider-custom">
+                <div class="divider-custom-line"></div>
+            </div>
+            <!--댓글 작성-->
+            <form action="/reply" method="post">
+                <input type="hidden" name="post_id" value="{{post_id}}" />
+                <input type="hidden" name="page" value="{{page}}" />
+                <input type="hidden" name="category" value="{{category}}" />
+                <br />
+                <div class="div_box">
+                <textarea required name="content" cols="155" rows="2"></textarea>
+                </div>
+                <div style="float:right">
+                <input type="submit" class="btn-post" value="작성" />
+                </div>
+            </form>
+                <br />
+                <br />
+                <!--댓글 출력-->
+                {% if reading['replys'] != -1 %}
+                    {% for reply in reading['replys'] %}
+                        <table>
+                            <tr>
+                                <td>
+                                    {% set reply_id = reply['_id'] %}
+                                        <p style="text-align:left; font-size:18px;font-family: 'Nanum Gothic Coding', monospace;">
+                                            {{reply['_source']['ID']}} {{reply['_source']['time']}} {{reply['_source']['report']}}                                            
+                                        </p>
+                                        
+                                </td>
+                                <td>
+                                    <p style="font-family: 'Nanum Gothic Coding', monospace; font-size:18px;">
+                                    {{reply['_source'][content]}}
+                                        
+                                        </p>
+                                </td>
+                            </tr>
+                        </table>
+                <!--돌아가기버튼-->
+                <br/>
+                <br/>
+                <div style="float:left">
+                    <input class="btn-post" type="submit" onclick="window.location.href='/community?category={{category}}&page={{page}}'" value="돌아가기">
+                </div>
+        </div>
+</section>
 
-            <tr>
-                <!-- 커뮤니티로 돌아가기 -->
-                <td>
-                <input type="submit" onclick="window.location.href='/community?category={{category}}&page={{page}}'" value="돌아가기">
-                </td>
-            </tr>
-        </table>
-    </body>
+    <!-- Footer-->
+    <footer class="footer text-center">
+        <div class="container">
+            <div class="row">
+                <!-- Footer Made By-->
+                <div class="col-lg-12 mb-5 mb-lg-0">
+                    <h4 class="text-uppercase mb-4">Made By</h4>
+                    <p class="lead mb-0">
+                        권수빈 &emsp;&emsp; 김은하
+                        <br />
+                        김찬솔 &emsp;&emsp; 이준협
+                    </p>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <!-- Copyright Section-->
+    <div class="copyright py-4 text-center text-white">
+        <div class="container"><small>Copyright © Your Website 2020</small></div>
+    </div>
+    <!-- Scroll to Top Button (Only visible on small and extra-small screen sizes)-->
+    <div class="scroll-to-top d-lg-none position-fixed">
+        <a class="js-scroll-trigger d-block text-center text-white rounded" href="#page-top"><i class="fa fa-chevron-up"></i></a>
+    </div>
+
+    <!-- Bootstrap core JS-->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Third party plugin JS-->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.4.1/jquery.easing.min.js"></script>
+    <!-- Contact form JS-->
+    <script src="assets/mail/jqBootstrapValidation.js"></script>
+    <script src="assets/mail/contact_me.js"></script>
+    <!-- Core theme JS-->
+    <script src="js/scripts.js"></script>
+</body>
 </html>
