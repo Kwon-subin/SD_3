@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml">
 <head>
@@ -13,21 +13,21 @@
             <div class="container">
                 <h1>Register</h1>
                 <form action="/register/teacher" method="post">
-                    <input type="text" id="member_id" name="member_id" placeholder="ID">
-                    <input type="password" id="passwd" name="passwd" placeholder="Password">
-                    <input type="text" id="name" name="name" placeholder="Name" />
+                    <input required type="text" id="member_id" name="member_id" placeholder="ID">
+                    <input required type="password" id="passwd" name="passwd" placeholder="Password">
+                    <input required type="text" id="name" name="name" placeholder="Name" />
                     <span> Your Birth&nbsp&nbsp&nbsp&nbsp</span>
-                    <span><input type="text" id="year" name="year" placeholder="19xx" size=15 maxlength=4 /></span>
-                    <span><input type="text" id="month" name="month" placeholder="xx" size=15 maxlength=2 /></span>
-                    <span><input type="text" id="day" name="day" placeholder="xx" size=15 maxlength=2 /></span>
+                    <span><input required type="text" id="year" name="year" placeholder="19xx" size=15 maxlength=4 /></span>
+                    <span><input required type="text" id="month" name="month" placeholder="xx" size=15 maxlength=2 /></span>
+                    <span><input required type="text" id="day" name="day" placeholder="xx" size=15 maxlength=2 /></span>
                     <br />
                     <span> Phone Number&nbsp&nbsp</span>
-                    <span><input type="text" id="f_phone" name="f_phone" placeholder="01x" size=13 maxlength=3 /></span>
-                    <span><input type="text" id="s_phone" name="s_phone" placeholder="xxxx" size=14 maxlength=4 /></span>
-                    <span><input type="text" id="t_phone" name="t_phone" placeholder="xxxx" size=14 maxlength=4 /></span>
+                    <span><input required type="text" id="f_phone" name="f_phone" placeholder="01x" size=13 maxlength=3 /></span>
+                    <span><input required type="text" id="s_phone" name="s_phone" placeholder="xxxx" size=14 maxlength=4 /></span>
+                    <span><input required type="text" id="t_phone" name="t_phone" placeholder="xxxx" size=14 maxlength=4 /></span>
                     <br />
-                    <input type="text" id="certificate_num" name="certificate_num" maxlength="2" placeholder="자격증 개수" />
-                    <input type="text" id="place" name="place" placeholder="장소 (예 : 대구광역시 북구 대학로 80) " maxlength="25" />
+                    <input required type="text" id="certificate_num" name="certificate_num" maxlength="2" placeholder="자격증 개수" />
+                    <input required type="text" id="place" name="place" placeholder="장소 (예 : 대구광역시 북구 대학로 80) " maxlength="25" />
                     <button type="submit">register</button>
                 </form>
                 <div class="clearfix"></div>
