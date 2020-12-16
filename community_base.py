@@ -47,6 +47,9 @@ def show(category, f): #게시판 리턴 f=from
         f += READING_SIZE
 
     try:
+        if category == None:
+            raise Exception
+
         ctgry = es.get_doc('category', category)
         post_ids_ = ctgry['_source']['detail']
 
@@ -102,14 +105,18 @@ def show(category, f): #게시판 리턴 f=from
         if len(docs) == 0:
             f -= READING_SIZE
             docs = es.get_idx_by_size('post', {'_id':'desc'}, f, READING_SIZE)
-
+        
         hots = es.get_idx_by_size('post', {'recommend':'desc'}, 0, 3)
-        for i, hot in enumerate(hots[:]):
-            if hot['_source']['recommend'] == 0:
-                del hots[i]
+        if hots != -1:
+            for i, hot in enumerate(hots[:]):
+                if hot['_source']['recommend'] == 0:
+                    del hots[i]
     
 
-    return [docs, hots, f]
+    if(type(docs) != type(0)):
+        return [docs, hots, f]
+    else:
+        return [{}, {}, 0]
 
 
 def next_page(f):
@@ -297,23 +304,34 @@ def reply_delete(reply_id):
 
 
 
-def search(condition):
+def search(category, condition):
+    ctgry = es.get_doc('category', category)
+    post_ids_ = ctgry['_source']['detail']
+    post_ids = None
+    for post_ids in post_ids_:
+        if post_ids['name'] == 'None':
+            break
+    post_ids = post_ids['post']
+    if len(post_ids) == 0:
+        return [{}, {}, 0]
+    
+    match = []
+    for _id in post_ids:
+        match.append({'match' : {'id':_id}})
+    
     body = {
         'sort':{'_id':'desc'},
         'query':{
             'bool':{
-                'should':[
-                    {
+                'must':[{
                     'match':{
                         'title':condition
-                    }
                     },
-                    {
                     'match':{
                         'hash':condition
                     }
-                    }
-                ]
+                }],
+                'should':match
             }
         }
     }
