@@ -61,7 +61,7 @@ def makeClass():
             'start' : start, #YYYY-MM-DD/
             'end' : end
             'M' : M, #Meet, Offline > True, Online > False
-            'c_content' : content
+            'c_content' : content,
             #'cat_name' : cat_name,
             #'cat_detail' : cat_detail,
         }
