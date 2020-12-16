@@ -34,6 +34,7 @@ def main():
             review = False
     else:
         review = False
+        
 
     return render_template("enroll_in.html", class_id = class_id, _class = _class, b_category = b_category, s_category = s_category, reviews = reviews, ID = ID, review = review)
     
@@ -51,10 +52,12 @@ def enroll():
     s_category = request.form['s_category']
 
     try:
-        session.get('class')
-        session['class'].append(class_id)
+        c = session.get('class')
+        c.append(class_id)
+        session['class'] = c
     except:
         session['class'] = [class_id]
+
 
     return render_template("payment.html", _class = _class, b_category = b_category, s_category = s_category)
 
