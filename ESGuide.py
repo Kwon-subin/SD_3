@@ -13,12 +13,12 @@ from elasticsearch import Elasticsearch
 from elasticsearch import helpers
 
 es = Elasticsearch('localhost:9200', timeout=30)
-#es.indices.delete(index='*') #테스트 끝나면 삭제
+es.indices.delete(index='*') #테스트 끝나면 삭제
 
 #필요한 테이블들 생성
 #테이블 이름은 모두 소문자로 작성해주세요
 #테이블 추가, 이름 수정 가능
-idxs = ['account', 'teacher', 'class', 'category', 'regist_request', 'post', 'post_num', 'reply', 'review']
+idxs = ['account', 'teacher', 'class', 'class_num', 'category', 'regist_request', 'post', 'post_num', 'reply', 'review']
 for idx in idxs:
         if not es.indices.exists(index=idx):
                 es.indices.create(index=idx)
@@ -325,6 +325,11 @@ if __name__=='__main__':
                 'c_content' : 'String',
                 }
         insert_doc('class', 'guide', _class)
+
+        class_num = {
+                "CLASS_NUM" : int(0),
+        }
+        insert_doc('class_num', 'class_num', class_num)
 
         category = { #pid = 00, 01 ...
                 'name' : 'String', #huge category name
