@@ -1,11 +1,10 @@
 import ESGuide as es
-from flask import Flask
-from flask import render_template
+from flask import Flask, Blueprint
+from flask import render_template, redirect, url_for
 from flask import request, session
 from werkzeug.utils import secure_filename
 import sys
 import re
-import requests
 import operator
 import time
 
@@ -13,22 +12,25 @@ from datetime import datetime
 from elasticsearch import Elasticsearch
 from elasticsearch import helpers
 
-makeClass = Flask(__name__)
-makeClass.secret_key = "SD_3"
+bp_makeClass = Blueprint('makeClass', __name__)
+bp_makeClass.secret_key = "SD_3"
 
-@makeClass.route('/')
+@bp_makeClass.route('/')
 def main():
     #if session['T'] == "True":
     return render_template("buttonClass.html")
     #else:
         #return render_template("register_f.html") #수강생 신분이면 오류 발생
 
-@makeClass.route('/buttonClass')
+@bp_makeClass.route('/buttonClass', methods=['GET'])
 def buttonClass():
-    return render_template("makeClass.html")
+    b_category = request.args.get('b_category')
+    s_category = request.args.get('s_category')
 
-@makeClass.route('/makeClass', methods=['POST'])
-def makeClass_():
+    return render_template("makeClass.html", b_category = b_category, s_category = s_category)
+
+@bp_makeClass.route('/makeClass', methods=['POST'])
+def makeClass():
     if request.method == 'POST':
         y_str = str(datetime.today().year) #현재 연도
         m_str = str(datetime.today().month) #현재 월
@@ -42,8 +44,7 @@ def makeClass_():
         m_str = str(request.form.get('m'))
         when = y_str + '-' + m_str + '-' + d_str + '/' + h_str + ':' + m_str
         cost = int(cost_str)
-        #ID = session['user_id']
-        ID = "tn1256"
+        ID = session['user_id']
         pid = ID + y_str + m_str + d_str + h_str + m_str #예 : tn125620201127
         if m_str == "offline":
             M = True
@@ -60,10 +61,8 @@ def makeClass_():
             #'cat_detail' : cat_detail,
         }
         res = es.insert_doc('class',pid,i_class)
-        if res == -1:
-            return render_template("register_f.html")
-        else:
-            return render_template("register_s.html")
+        es.addToCategory(cat_name, cat_detail, 'class', pid)
+        return redirect(url_for('class.'+cat_name+'_'+cat_detail))
 
 if __name__ == '__main__':
-    makeClass.run(host='127.0.0.1', port=5000, debug=True)
+    bp_makeClass.run(host='127.0.0.1', port=5000, debug=True)
