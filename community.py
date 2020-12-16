@@ -1,82 +1,83 @@
 import community_base as cb
-from flask import Flask, render_template, request, redirect, url_for, session
+from flask import Blueprint, render_template, request, redirect, url_for, session
 import string
 import random
 
 
 
 
-string_pool = string.ascii_letters + string.digits + string.punctuation
-key = ""
-for i in range(10):
-    key += random.choice(string_pool)
-app = Flask(__name__)
-app.secret_key = key
+bp_community = Blueprint('community', __name__)
 
-CATEGORIES = ['test1', 'test2']
+CATEGORIES = ['art', 'beauty', 'cooking', 'experience']
 
 
 
 
 ########### 로그인 ###########
 
-@app.route('/')
-def main():
-    return render_template('login.html')
+# @bp_community.route('/')
+# def main():
+#     return render_template('login.html')
 
 
-@app.route('/login', methods=['POST'])
-def login():
-    ID = request.form['ID']
-    session['user_id'] = ID
+# @bp_community.route('/login', methods=['POST'])
+# def login():
+#     ID = request.form['ID']
+#     session['user_id'] = ID
 
-    return redirect(url_for('community', category = 'None', page = 0))
+#     return redirect(url_for('community.community', page = 0))
 
 
 
 
 ########### 페이지 관련 ###########
 
-@app.route('/community', methods=['GET'])
+@bp_community.route('/community', methods=['GET'])
 def community():
     ID = session.get('user_id')
     category = request.args.get('category')
     page = int(request.args.get('page'))
-    docs, hots, page = cb.show(category, page)
 
-    return render_template('community.html', categories = CATEGORIES, hots = hots, posts = docs, ID = ID, category = category, page = page)
+    htmlname = 'main_community.html'
+    docs = {}
+    hots = {}
+    if category != None:
+        docs, hots, page = cb.show(category, page)
+        htmlname = 'community_' + category + '.html'
+
+    return render_template(htmlname, categories = CATEGORIES, hots = hots, posts = docs, ID = ID, category = category, page = page)
 
 
-@app.route('/nextpage', methods=['POST'])
+@bp_community.route('/nextpage', methods=['POST'])
 def nextpage():
     category = request.form['category']
     page = int(request.form['page'])
     page = cb.next_page(page)
 
-    return redirect(url_for('community', category = category, page = page))
+    return redirect(url_for('community.community', category = category, page = page))
 
 
-@app.route('/backpage', methods=['POST'])
+@bp_community.route('/backpage', methods=['POST'])
 def backpage():
     category = request.form['category']
     page = int(request.form['page'])
     page = cb.back_page(page)
 
-    return redirect(url_for('community', category = category, page = page))
+    return redirect(url_for('community.community', category = category, page = page))
 
 
 
 
 ########### 글쓰기 ###########
 
-@app.route('/post', methods=['POST'])
+@bp_community.route('/post', methods=['POST'])
 def post():
     ID = session.get('user_id')
     category = request.form['category']
 
     return render_template('post.html', ID = ID, categories = CATEGORIES, category = category)
 
-@app.route('/posting', methods=['POST'])
+@bp_community.route('/posting', methods=['POST'])
 def posting():
     ID = session.get('user_id')
     title = request.form['title']
@@ -87,14 +88,14 @@ def posting():
     cb.post(ID, title, content, hashtags, category)
 
 
-    return redirect(url_for('community', category = category, page = 0))
+    return redirect(url_for('community.community', category = category, page = 0))
 
 
 
 
 ########### 글읽기 ###########
 
-@app.route('/read', methods=['POST'])
+@bp_community.route('/read', methods=['POST'])
 def read():
     ID = session.get('user_id')
     post_id = request.form['post_id']
@@ -108,27 +109,27 @@ def read():
 
 
 
-@app.route('/recommend', methods=['POST'])
+@bp_community.route('/recommend', methods=['POST'])
 def recommend():
     post_id = request.form['post_id']
     no = cb.recommend(post_id)
 
-    return redirect(url_for('read'), code = 307)
+    return redirect(url_for('community.read'), code = 307)
 
 
 
 
-@app.route('/report', methods=['POST'])
+@bp_community.route('/report', methods=['POST'])
 def report():
     post_id = request.form['post_id']
     no = cb.report(post_id)
 
-    return redirect(url_for('read'), code = 307)
+    return redirect(url_for('community.read'), code = 307)
 
 
 
 
-@app.route('/revise', methods=['POST'])
+@bp_community.route('/revise', methods=['POST'])
 def revise():
     ID = session.get('user_id')
     post_id = request.form['post_id']
@@ -136,12 +137,12 @@ def revise():
     category = request.form['category']
     post = cb.read(post_id)
 
-    return render_template('revise.html', ID = ID, reading = post, page = page, post_id = post_id, categories = CATEGORIES, category = category)
+    return render_template('revise.html', ID = ID, post = post, page = page, post_id = post_id, categories = CATEGORIES, category = category)
 
 
 
 
-@app.route('/revising', methods=['POST'])
+@bp_community.route('/revising', methods=['POST'])
 def revising():
     post_id = request.form['post_id']
     page = int(request.form['page'])
@@ -154,26 +155,26 @@ def revising():
     no = cb.revise(post_id, title, content, hashtags, originalC, category)
 
 
-    return redirect(url_for('read'), code = 307)
+    return redirect(url_for('community.read'), code = 307)
 
 
 
 
-@app.route('/delete', methods=['POST'])
+@bp_community.route('/delete', methods=['POST'])
 def delete():
     post_id = request.form['post_id']
     category = request.form['category']
     page = int(request.form['page'])
     cb.delete(post_id, category)
 
-    return redirect(url_for('community', category = category, page = page))
+    return redirect(url_for('community.community', category = category, page = page))
 
 
 
 
 ########### 댓글 관련 ###########
 
-@app.route('/reply', methods=['POST'])
+@bp_community.route('/reply', methods=['POST'])
 def reply():
     ID = session.get('user_id')
     content = request.form['content']
@@ -182,12 +183,12 @@ def reply():
     page = int(request.form['page'])
 
 
-    return redirect(url_for('read'), code = 307)
+    return redirect(url_for('community.read'), code = 307)
 
 
 
 
-@app.route('/reply_report', methods=['POST'])
+@bp_community.route('/reply_report', methods=['POST'])
 def reply_report():
     reply_id = request.form['reply_id']
     
@@ -195,12 +196,12 @@ def reply_report():
     page = int(request.form['page'])
 
 
-    return redirect(url_for('read'), code = 307)
+    return redirect(url_for('community.read'), code = 307)
 
 
 
 
-@app.route('/reply_revise', methods=['POST'])
+@bp_community.route('/reply_revise', methods=['POST'])
 def reply_revise():
     reply_id = request.form['reply_id']
     content = request.form['content']
@@ -209,12 +210,12 @@ def reply_revise():
     no = cb.reply_revise(reply_id, content)
 
 
-    return redirect(url_for('read'), code = 307)
+    return redirect(url_for('community.read'), code = 307)
 
 
 
 
-@app.route('/reply_delete', methods=['POST'])
+@bp_community.route('/reply_delete', methods=['POST'])
 def reply_delete():
     reply_id = request.form['reply_id']
 
@@ -222,28 +223,31 @@ def reply_delete():
     page = int(request.form['page'])
 
 
-    return redirect(url_for('read'), code = 307)
+    return redirect(url_for('community.read'), code = 307)
 
 
 
 
 ########### 검색 ###########
 
-@app.route('/search', methods=['POST'])
+@bp_community.route('/search', methods=['POST'])
 def search():
     ID = session.get('user_id')
-    condition = request.form['condition']
+    category = request.form['category']
+    condition = request.form['search']
     
-    docs = cb.search(condition)
+    docs = cb.search(category, condition)
     if docs == -1:
         docs = {}
+    
+    htmlname = 'community_' + category + '.html'
 
 
-    return render_template('community.html', categories = CATEGORIES, category = 'None', posts = docs, page = 0, ID = ID)
+    return render_template(htmlname, categories = CATEGORIES, category = category, posts = docs, page = 0, ID = ID)
 
 
 
 
-if __name__ == '__main__':
-    app.run()
-    #app.run(host = '0.0.0.0')
+#if __name__ == '__main__':
+    #bp_community.run(host = '127.0.0.1', port = 5000, debug = True)
+    #bp_community.run(host = '0.0.0.0')
