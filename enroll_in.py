@@ -22,10 +22,20 @@ def main():
     _class = es.get_doc('class', class_id)
     b_category = request.form['b_category']
     s_category = request.form['s_category']
+    ID = session.get('user_id')
 
     reviews = es.search_dbr_sorted('review', 'id', class_id+"000", class_id+"1000", [{'_id':'desc'}])
 
-    return render_template("enroll_in.html", class_id = class_id, _class = _class, b_category = b_category, s_category = s_category, reviews = reviews)
+    review = session.get('class')
+    if review != None:
+        if class_id in review:
+            review = True
+        else:
+            review = False
+    else:
+        review = False
+
+    return render_template("enroll_in.html", class_id = class_id, _class = _class, b_category = b_category, s_category = s_category, reviews = reviews, ID = ID, review = review)
     
 
 @bp_enroll.route('/return_class')
@@ -39,6 +49,12 @@ def enroll():
     _class = es.get_doc('class', class_id)
     b_category = request.form['b_category']
     s_category = request.form['s_category']
+
+    try:
+        session.get('class')
+        session['class'].append(class_id)
+    except:
+        session['class'] = [class_id]
 
     return render_template("payment.html", _class = _class, b_category = b_category, s_category = s_category)
 
