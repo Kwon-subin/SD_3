@@ -409,7 +409,7 @@ h6, .h6 {
     z-index: 10;
     width: 40px;
     height: 40px;
-    background-image: url("starrate.png");
+    background-image: url("https://github.com/Kwon-subin/SD_3/blob/html/css/starrate.png?raw=true");
     background-repeat: no-repeat;
     background-size: 40px 40px;
     cursor: pointer;
