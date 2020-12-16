@@ -1,35 +1,97 @@
-from flask import Flask, render_template, request
-from random import choice
-
-web_site = Flask(__name__)
-
-number_list = [
-	100, 101, 200, 201, 202, 204, 206, 207, 300, 301, 302, 303, 304, 305, 307, 400, 401, 402, 403, 404, 405, 406, 408, 409, 410, 411, 412, 413, 414, 415,
-	416, 417, 418, 421, 422, 423, 424, 425, 426,
-	429, 431, 444, 450, 451, 500, 502, 503, 504, 506, 507, 508, 509, 510, 511, 599
-]
+from flask import Blueprint, render_template, request, session
 
 
+bp_class = Blueprint('class', __name__)
 
-#category
-@web_site.route('/')
-def catelarge():
-  return render_template('category.html', code=choice(number_list))
 
-@web_site.route('/catasmall1')
-def catesmall1():
-  return render_template('catesmall1.html', code=choice(number_list))
+@bp_class.route('/main_class')
+def main_class():
+    return render_template("main_class.html")
 
-@web_site.route('/catasmall2')
-def catesmall2():
-  return render_template('/catesmall2.html', code=choice(number_list))
+@bp_class.route('/art')
+def art():
+    return render_template("class_category_art.html")
 
-@web_site.route('/catasmall3')
-def catesmall3():
-  return render_template('catesmall3.html', code=choice(number_list))
+@bp_class.route('/beauty')
+def beauty():
+    return render_template("class_category_beauty.html")
 
-@web_site.route('/catasmall4')
-def catesmall4():
-  return render_template('catesmall4.html', code=choice(number_list))
+@bp_class.route('/cooking')
+def cooking():
+    return render_template("class_category_cooking.html")
 
-web_site.run(host='0.0.0.0', port=8080)
+@bp_class.route('/experience')
+def experience():
+    return render_template("class_category_experience.html")
+
+
+@bp_class.route('/experience/craft')
+def experience_craft():
+    return render_template("class_show.html",data = '/experience/craft', teacher = session['T'],
+        b_category = 'experience', s_category='craft')
+@bp_class.route('/experience/dance_vocal')
+def experience_dance_vocal():
+    return render_template("class_show.html",data= '/experience/dance_vocal', teacher = session['T'],
+        b_category = 'experience', s_category='dance_vocal')
+@bp_class.route('/experience/flower')
+def experience_flower():
+    return render_template("class_show.html",data='/experience/flower', teacher = session['T'],
+        b_category = 'experience', s_category='flower')
+@bp_class.route('/experience/etc')
+def experience_etc():
+    return render_template("class_show.html",data='/experience/etc', teacher = session['T'],
+        b_category = 'experience', s_category='etc')
+
+
+@bp_class.route('/beauty/cosmetic')
+def beauty_cosmetic():
+    return render_template("class_show.html",data='/beauty/cosmetic', teacher = session['T'],
+        b_category = 'beauty', s_category='cosmetic')
+@bp_class.route('/beauty/soap')
+def beauty_soap():
+    return render_template("class_show.html",data='/beauty/soap', teacher = session['T'],
+        b_category = 'beauty', s_category='soap')
+@bp_class.route('/beauty/perfume')
+def beauty_perfume():
+    return render_template("class_show.html",data='/beauty/perfume', teacher = session['T'],
+        b_category = 'beauty', s_category='perfume')
+@bp_class.route('/beauty/etc')
+def beauty_etc():
+    return render_template("class_show.html",data='/beauty/etc', teacher = session['T'],
+        b_category = 'beauty', s_category='etc')
+
+
+@bp_class.route('/cooking/baking')
+def cooking_baking():
+    return render_template("class_show.html",data='/cooking/baking', teacher = session['T'],
+        b_category = 'cooking', s_category='baking')
+@bp_class.route('/cooking/drink')
+def cooking_drink():
+    return render_template("class_show.html",data='/cooking/drink', teacher = session['T'],
+        b_category = 'cooking', s_category='drink')
+@bp_class.route('/cooking/meal')
+def cooking_meal():
+    return render_template("class_show.html",data='/cooking/meal', teacher = session['T'],
+        b_category = 'cooking', s_category='meal')
+@bp_class.route('/cooking/etc')
+def cooking_etc():
+    return render_template("class_show.html",data='/cooking/etc', teacher = session['T'],
+        b_category = 'cooking', s_category='etc')
+
+
+@bp_class.route('/art/handwriting')
+def art_handwriting():
+    return render_template("class_show.html",data='/art/handwriting', teacher = session['T'],
+        b_category = 'art', s_category='handwriting')
+@bp_class.route('/art/drawing')
+def art_drawing():
+    return render_template("class_show.html",data='/art/drawing', teacher = session['T'],
+        b_category = 'art', s_category='drawing')
+@bp_class.route('/art/coloring')
+def art_coloring():
+    return render_template("class_show.html",data='/art/coloring', teacher = session['T'],
+        b_category = 'art', s_category='coloring')
+@bp_class.route('/art/etc')
+def art_etc():
+    return render_template("class_show.html",data='/art/etc', teacher = session['T'],
+        b_category = 'art', s_category='etc')
