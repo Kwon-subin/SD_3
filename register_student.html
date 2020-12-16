@@ -3,7 +3,13 @@
 <head>
     <link rel="stylesheet" type="text/css" href="{{url_for('static', filename='css/register.css')}}">
     <meta charset="utf-8" />
-    <title></title>
+    <title>Oneday Class Platform</title>
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Jua&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Do+Hyeon&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Nanum+Gothic+Coding&display=swap" rel="stylesheet">
 </head>
 <body>
     <div class="container">
@@ -17,16 +23,16 @@
                     <input required type="text" id="name" name="name" placeholder="Name" />
                         <table>
                             <tr>
-                                <th scope="row"> Your Birth&nbsp&nbsp&nbsp&nbsp</th>
-                                <td><input required type="text" id="year" name="year" placeholder="19xx" size=13 maxlength=4 /></td>
-                                <td><input required type="text" id="month" name="month" placeholder="xx" size=13 maxlength=2 /></td>
-                                <td><input required type="text" id="day" name="day" placeholder="xx" size=13 maxlength=2 /></td>
+                                <th style="font-family: 'Nanum Gothic Coding', monospace;  width: 150px;" scope="row"> Your Birth&nbsp&nbsp</th>
+                                <td><input required type="text" id="year" name="year" placeholder="19xx" size=12 maxlength=4 /></td>
+                                <td><input required type="text" id="month" name="month" placeholder="xx" size=12 maxlength=2 /></td>
+                                <td><input required type="text" id="day" name="day" placeholder="xx" size=12 maxlength=2 /></td>
                             </tr>
                             <tr>
-                                <th scope="row"> Phone&nbsp&nbsp</th>
-                                <td><input required type="text" id="f_phone" name="f_phone" placeholder="01x" size=13 maxlength=3 /></td>
-                                <td><input required type="text" id="s_phone" name="s_phone" placeholder="xxxx" size=13 maxlength=4 /></td>
-                                <td><input required type="text" id="t_phone" name="t_phone" placeholder="xxxx" size=13 maxlength=4 /></td>
+                                <th style="font-family: 'Nanum Gothic Coding', monospace;  width: 150px;" scope="row"> Phone&nbsp</th>
+                                <td><input required type="text" id="f_phone" name="f_phone" placeholder="01x" size=12 maxlength=3 /></td>
+                                <td><input required type="text" id="s_phone" name="s_phone" placeholder="xxxx" size=12 maxlength=4 /></td>
+                                <td><input required type="text" id="t_phone" name="t_phone" placeholder="xxxx" size=12 maxlength=4 /></td>
                             </tr>
                         </table>
                     <button type="submit">register</button>
