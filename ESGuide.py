@@ -319,7 +319,8 @@ if __name__=='__main__':
                 'ID' : 'String',
                 'c_name' : 'String',
                 'cost' : int(0),
-                'when' : 'String', #YYYY-MM-DD/HH:MM (시간은 24시간 단위)
+                'start' : 'String', #YYYY-MM-DD
+                'end' : 'String', #YYYY-MM-DD
                 'M' : False, #Meet, Offline > True, Online > False
                 }
         insert_doc('class', 'guide', _class)
