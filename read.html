@@ -137,24 +137,15 @@
                 <br />
                 <!--댓글 출력-->
                 {% if reading['replys'] != -1 %}
-                    {% for reply in reading['replys'] %}
-                        <table>
-                            <tr>
-                                <td>
-                                    {% set reply_id = reply['_id'] %}
-                                        <p style="text-align:left; font-size:18px;font-family: 'Nanum Gothic Coding', monospace;">
-                                            {{reply['_source']['ID']}} {{reply['_source']['time']}} {{reply['_source']['report']}}                                            
-                                        </p>
-                                        
-                                </td>
-                                <td>
-                                    <p style="font-family: 'Nanum Gothic Coding', monospace; font-size:18px;">
-                                    {{reply['_source'][content]}}
-                                        
-                                        </p>
-                                </td>
-                            </tr>
-                        </table>
+                        {% for reply in reading['replys'] %}
+                            <table style="font-family: 'Nanum Gothic Coding', monospace; ">
+                                <tr>
+                                    <td>
+                                        {{reply['_source']['ID']}} | {{reply['_source']['time']}} | {{reply['_source']['report']}}
+                                    </td>
+                                    <td>&emsp;>>&emsp;{{reply['_source'][content]}}</td>
+                                </tr>
+                            </table>
                 <!--돌아가기버튼-->
                 <br/>
                 <br/>
