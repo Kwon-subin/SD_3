@@ -1,3 +1,4 @@
+import ESGuide as es
 from flask import Flask, render_template, redirect, url_for, session
 from community import bp_community
 from main_category import bp_class
@@ -24,6 +25,10 @@ def main():
 
 @app.route('/logout')
 def logout():
+    acc = es.get_doc('account', session['user_id'])
+    acc['_source']['class'] = session['class']
+    es.insert_doc('account', acc['_id'], acc['_source'])
+
     session.clear()
 
     return render_template('login.html')
