@@ -43,6 +43,8 @@ def makeClass():
         cat_detail = request.form['cat_detail']
         m_str = str(request.form.get('m'))
         when = y_str + '-' + m_str + '-' + d_str + '/' + h_str + ':' + m_str
+        start = request.form['start']
+        end = request.form['end']
         cost = int(cost_str)
         ID = session['user_id']
         pid = ID + y_str + m_str + d_str + h_str + m_str #예 : tn125620201127
@@ -55,7 +57,8 @@ def makeClass():
             'ID' : ID,
             'c_name' : c_name,
             'cost' : cost,
-            'when' : when, #YYYY-MM-DD/HH:MM (시간은 24시간 단위)
+            'start' : start, #YYYY-MM-DD/HH:MM (시간은 24시간 단위)
+            'end' : end
             'M' : M, #Meet, Offline > True, Online > False
             #'cat_name' : cat_name,
             #'cat_detail' : cat_detail,
