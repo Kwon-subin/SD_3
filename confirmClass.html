@@ -42,7 +42,6 @@
                 form.submit();
             }
             function showConfirm() {
-                alert("등록이 완료되었습니다.");
                 document.location.href = "main_class.html";
             }
     </script>
@@ -96,53 +95,55 @@
 
     <!-- Portfolio Section-->
     <form action="/makeClass" method="post">
-    <section class="page-section portfolio" id="portfolio">
-        <div class="container">
-            <!-- Portfolio Section Heading-->
-            <h2 style="    font-family: 'Jua', sans-serif;" class="page-section-heading text-center text-uppercase text-secondary mb-0">클래스 등록하기</h2>
-            <!-- Icon Divider-->
-            <div class="divider-custom">
-                <div class="divider-custom-line"></div>
-                <div class="divider-custom-icon"><i class="fas fa-star"></i></div>
-                <div class="divider-custom-line"></div>
-            </div>
-            <br />
-            <br />
-            <div id="table_wrapper">
+        <section class="page-section portfolio" id="portfolio">
+            <div class="container">
+                <!-- Portfolio Section Heading-->
+                <h2 style="    font-family: 'Jua', sans-serif;" class="page-section-heading text-center text-uppercase text-secondary mb-0">클래스 등록 완료</h2>
+                <!-- Icon Divider-->
+                <div class="divider-custom">
+                    <div class="divider-custom-line"></div>
+                    <div class="divider-custom-icon"><i class="fas fa-star"></i></div>
+                    <div class="divider-custom-line"></div>
+                </div>
+                <br />
+                <br />
+                <div id="table_wrapper">
 
-                <table style="font-family: 'Nanum Gothic Coding', monospace; font-size:20px;" class="type04">
-                    <tr>
-                        <th scope="row">클래스 명</th>
-                        <td><input type="text" id="c_name" name="c_name"></td>
-                    </tr>
-                    <tr>
-                        <th scope="row">가격</th>
-                        <td><input type="text" name="cost" id="cost" maxlength="20"></td>
-                    </tr>
-                    <tr>
-                        <th scope="row">카테고리</th>
-                        <td>{{b_category}} - {{s_category}}</td>
-                    </tr>
-                    <tr>
-                        <th scope="row">장소</th>
-                        <td>
-                            <select name="m" id="m">
-                                <option value=" ">선택</option>
-                                <option value="offline">Offline</option>
-                                <option value="online">Online</option>
-                            </select>
-                        </td>
-                    </tr>
-                </table>
+                    <table style="font-family: 'Nanum Gothic Coding', monospace; font-size:20px;" class="type04">
+                        <tr>
+                            <th scope="row">클래스 명</th>
+                            <td>{{c_name}}</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">가격</th>
+                            <td>{{cost}}</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">카테고리</th>
+                            <td>{{b_category}} - {{s_category}}</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">장소</th>
+                            <td>
+                                {{% place = M %}}
+                                {{% if place == False %}}
+                                온라인
+                                {{% endif %}}
+                                {{% if place == True %}}
+                                오프라인
+                                {{% endif %}}
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+                </br>
+                </br>
             </div>
-            </br>
-            </br>
-        </div>
 
-    <div style="font-family: 'Jua', sans-serif; font-size:13px" class="container">
-        <button type="submit" class="btn-2">등록하기</button>
-    </div>
-    </section>
+            <div style="font-family: 'Jua', sans-serif; font-size:13px" class="container">
+                <button type="button" class="btn-2" onclick="location.href='main_class.html'">돌아가기</button>
+            </div>
+        </section>
     </form>
     </br>
 
