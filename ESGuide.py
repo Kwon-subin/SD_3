@@ -13,46 +13,64 @@ from elasticsearch import Elasticsearch
 from elasticsearch import helpers
 
 es = Elasticsearch('localhost:9200', timeout=30)
-es.indices.delete(index='*') #테스트 끝나면 삭제
+#es.indices.delete(index='*') #테스트 끝나면 삭제
 
 #필요한 테이블들 생성
 #테이블 이름은 모두 소문자로 작성해주세요
 #테이블 추가, 이름 수정 가능
-idxs = ['account', 'teacher', 'class', 'category', 'regist_request', 'post', 'post_num', 'reply']
+idxs = ['account', 'teacher', 'class', 'category', 'regist_request', 'post', 'post_num', 'reply', 'review']
 for idx in idxs:
         if not es.indices.exists(index=idx):
                 es.indices.create(index=idx)
 
 #필요한 카테고리 생성
-CATEGORIES = [{
-        'name' : 'None',
-        'detail' : [{
-                'name' : 'None',
-                'class' : [],
-                'post' : []
-        }]
+CATEGORIES = [
+        {
+        'name' : 'art',
+        'detail' : [
+                {'name':'None', 'class':[], 'post':[]},
+                {'name':'handwriting', 'class':[], 'post':[]},
+                {'name':'drawing', 'class':[], 'post':[]},
+                {'name':'coloring', 'class':[], 'post':[]},
+                {'name':'etc', 'class':[], 'post':[]}
+                ]
         },
         {
-        'name' : 'test1',
-        'detail' : [{
-                'name' : 'None',
-                'class' : [],
-                'post' : []
-        }]
+        'name' : 'beauty',
+        'detail' : [
+                {'name':'None', 'class':[], 'post':[]},
+                {'name':'cosmetic', 'class':[], 'post':[]},
+                {'name':'soap', 'class':[], 'post':[]},
+                {'name':'perfume', 'class':[], 'post':[]},
+                {'name':'etc', 'class':[], 'post':[]}
+                ]
         },
         {
-        'name' : 'test2',
-        'detail' : [{
-                'name' : 'None',
-                'class' : [],
-                'post' : []
-        }]
+        'name' : 'cooking',
+        'detail' : [
+                {'name':'None', 'class':[], 'post':[]},
+                {'name':'baking', 'class':[], 'post':[]},
+                {'name':'drink', 'class':[], 'post':[]},
+                {'name':'meal', 'class':[], 'post':[]},
+                {'name':'etc', 'class':[], 'post':[]}
+                ]
+        },
+        {
+        'name' : 'experience',
+        'detail' : [
+                {'name':'None', 'class':[], 'post':[]},
+                {'name':'craft', 'class':[], 'post':[]},
+                {'name':'dance_vocal', 'class':[], 'post':[]},
+                {'name':'flower', 'class':[], 'post':[]},
+                {'name':'etc', 'class':[], 'post':[]}
+                ]
         }
 ]
 for ctgry in CATEGORIES:
-        es.index(index = 'category', id=ctgry['name'], body=ctgry)
-
-es.indices.refresh(index = 'category')
+        try:
+                es.get(index = 'category', id  = ctgry['name'])
+        except:
+                es.index(index = 'category', id = ctgry['name'], body = ctgry)
 
 
 
@@ -348,3 +366,12 @@ if __name__=='__main__':
                 'report' : int(0)
                 }
         insert_doc('reply', 'guide', reply)
+
+        review = {
+                'id' : 'String',
+                'ID' : 'String',
+                'content' : 'String',
+                'rate' : int(0),
+                'time' : 'String'
+                }
+        insert_doc('review', 'guide', review)
