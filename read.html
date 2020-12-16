@@ -97,11 +97,17 @@
                 <div class="divider-custom-icon"><i class="fas fa-star"></i></div>
                 <div class="divider-custom-line"></div>
             </div>
+            <br />
+            <br />
             <p style="font-family: 'Nanum Gothic Coding', monospace; font-size:20px;">{{reading['content']}}</p>
+            <br />
+            <br />
             <p style="text-align:center; font-family: 'Jua', sans-serif;">
                 {{reading['time']}}<br>
                 {{reading['recommend']}}  {{reading['report']}}<br>
             </p>
+            <br />
+            <br />
             {% set post_id = reading['id'] %}
             {% if reading['ID'] == login %}
             <div style="float:right">
