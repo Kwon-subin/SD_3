@@ -7,14 +7,38 @@
         <meta name="author" content="" />
         <title>Class_List</title>
         <!-- Favicon-->
-        <link rel="icon" type="image/x-icon" href="static/assets/img/favicon.ico" />
+        <link rel="icon" type="image/x-icon" href="{{url_for('static', filename='assets/img/favicon.ico')}}" />
         <!-- Font Awesome icons (free version)-->
         <script src="https://use.fontawesome.com/releases/v5.15.1/js/all.js" crossorigin="anonymous"></script>
         <!-- Google fonts-->
         <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet" type="text/css" />
         <link href="https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic" rel="stylesheet" type="text/css" />
         <!-- Core theme CSS (includes Bootstrap)-->
-        <link href="static/css/main.css" rel="stylesheet" />
+        <link href="{{url_for('static', filename='css/main.css')}}" rel="stylesheet" />
+
+        <script language="javascript">	
+            function postForm(path, params, method) {	
+                method = method || 'post';	
+
+                var form = document.createElement('form');	
+                form.setAttribute('method', method);	
+                form.setAttribute('action', path);	
+
+                for (var key in params) {	
+                    if (params.hasOwnProperty(key)) {	
+                        var hiddenField = document.createElement('input');	
+                        hiddenField.setAttribute('type', 'hidden');	
+                        hiddenField.setAttribute('name', key);	
+                        hiddenField.setAttribute('value', params[key]);	
+
+                        form.appendChild(hiddenField);	
+                    }	
+                }	
+
+                document.body.appendChild(form);	
+                form.submit();	
+            }	
+        </script>
     </head>
     <body id="page-top">
         <!-- Navigation-->
@@ -27,9 +51,9 @@
                 </button>
                 <div class="collapse navbar-collapse" id="navbarResponsive">
                     <ul class="navbar-nav ml-auto">
-                        <li class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded" href="#" onclick="location.href='main_class.html'">Class</a></li>
-                        <li class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded" href="#" onclick="location.href='main_community.html'">Community</a></li>
-                        <li class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded" href="#" onclick="location.href='login.html'">Logout</a></li>
+                        <li class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded" href="#" onclick="location.href='/main_class'">Class</a></li>
+                        <li class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded" href="#" onclick="location.href='/community?page=0'">Community</a></li>
+                        <li class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded" href="#" onclick="location.href='/logout'">Logout</a></li>
                     </ul>
                 </div>
             </div>
@@ -39,7 +63,7 @@
             <div class="container d-flex align-items-center flex-column">
                 <!-- Masthead Heading-->
                 
-                <h1 class="masthead-heading text-uppercase mb-0"></br>{{detail}}</br></br></h1>
+                <h1 class="masthead-heading text-uppercase mb-0"></br>{{s_category}}</br></br></h1>
                 <!-- Icon Divider-->
                 <div class="divider-custom divider-light">
                     <div class="divider-custom-line"></div>
@@ -66,26 +90,28 @@
                 <div class="row justify-content-center">
                 
                 {% if teacher == True %}
-                    <form action="/class_plus" method="post">
-                    <button class="btn btn-primary btn-xl" id="class_plus" type="submit" style="float:right;">Class create</button>
-                    </form>
+                    <div>
+                        <button class="btn btn-primary btn-xl" id="class_plus" type="submit" style="float:right;" onclick="location.href='/buttonClass?b_category={{b_category}}&s_category={{s_category}}'">Class create</button>
+                    </div>
                 {% endif %}
-                    
+                
                 {% if reading != -1 %}
                     {% for class in reading %}
                         
                     <form action="/class_list" method="post">    
                     <div class="row" style="width:800px; height:350px; padding:10px; margin:10px">
                     <div style="width:380px; height:330px; padding: 10px; margin:0px 10px 0px 0px;">                            
-                        <div class="portfolio-item mx-auto" data-toggle="modal" data-target="#portfolioModal2">
+                        <div class="portfolio-item mx-auto" data-toggle="modal" data-target="#portfolioModal2  ">
+                            {% set class_id = class['_id'] %}
+                            <a href="#" onclick="postForm('/enroll', {'class_id':'{{class_id}}', 'b_category':'{{b_category}}', 's_category':'{{s_category}}'})">
                             <div class="portfolio-item-caption d-flex align-items-center justify-content-center h-100 w-100">
                                 <div class="portfolio-item-caption-content text-center text-white"><i class="fas fa-plus fa-3x"></i>
                                 </div>
                             </div>
                             <img class="img-fluid" src="{{url_for('static', filename='assets/img/photo/list.jpg')}}" alt="" />
+                            </a>
                         </div>
                     </div>
-                                
                             <div style="width:380px; height:330px; padding: 10px;"><p class="lead"><b>{{class['_source']['c_name']}}</b></br></br>{{class['_source']['c_content']}}</p>
                             </div>
                     </div>
@@ -129,9 +155,9 @@
         <!-- Third party plugin JS-->
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.4.1/jquery.easing.min.js"></script>
         <!-- Contact form JS-->
-        <script src="static/assets/mail/jqBootstrapValidation.js"></script>
-        <script src="static/assets/mail/contact_me.js"></script>
+        <script src="{{url_for('static', filename='assets/mail/jqBootstrapValidation.js')}}"></script>
+        <script src="{{url_for('static', filename='assets/mail/contact_me.js')}}"></script>
         <!-- Core theme JS-->
-        <script src="static/js/scripts.js"></script>
+        <script src="{{url_for('static', filename='js/scripts.js')}}"></script>
     </body>
 </html>
