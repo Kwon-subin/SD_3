@@ -107,7 +107,7 @@
                     <div class="col-lg-4 mr-auto"><p class="lead">클래스 설명</br>{{_class['_source']['c_content']}}</br>비용 : {{_class['_source']['cost']}}</br>시간 : {{_class['_source']['start']}} ~ {{_class['_source']['end']}}</p></div>
                 </div>
                 <!-- About Section Button-->
-                <form action="/payment" method="POST">
+                {% if review == False %}
                 <div class="text-center mt-4">
                     {% set class_id = _class['_id'] %}
                     <a class="btn btn-xl btn-outline-light" onclick="postForm('/payment', {'class_id':'{{class_id}}', 'b_category':'{{b_category}}', 's_category':'{{s_category}}'})">
@@ -115,7 +115,7 @@
                         Enroll!
                     </a>
                 </div>
-                </form>
+                {% endif %}
             </div>
         </section>
         <!-- Review Section-->
