@@ -1,20 +1,20 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
-    <head> 
+    <head>
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
         <meta name="description" content="" />
         <meta name="author" content="" />
         <title>Class_Cooking</title>
         <!-- Favicon-->
-        <link rel="icon" type="image/x-icon" href="{{url_for('static', filename='assets/img/favicon.ico')}}" />
+        <link rel="icon" type="image/x-icon" href="static/assets/img/favicon.ico" />
         <!-- Font Awesome icons (free version)-->
         <script src="https://use.fontawesome.com/releases/v5.15.1/js/all.js" crossorigin="anonymous"></script>
         <!-- Google fonts-->
         <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet" type="text/css" />
         <link href="https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic" rel="stylesheet" type="text/css" />
         <!-- Core theme CSS (includes Bootstrap)-->
-        <link href="{{url_for('static', filename='css/main.css')}}" rel="stylesheet" />
+        <link href="static/css/main.css" rel="stylesheet" />
     </head>
     <body id="page-top">
         <!-- Navigation-->
@@ -27,9 +27,9 @@
                 </button>
                 <div class="collapse navbar-collapse" id="navbarResponsive">
                     <ul class="navbar-nav ml-auto">
-                        <li class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded" href="#" onclick="location.href='main_class'">Class</a></li>
-                        <li class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded" href="#" onclick="location.href='community?page=0'">Community</a></li>
-                        <li class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded" href="#" onclick="location.href='logout'">Logout</a></li>
+                        <li class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded" href="#" onclick="location.href='main_class.html'">Class</a></li>
+                        <li class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded" href="#" onclick="location.href='main_community.html'">Community</a></li>
+                        <li class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded" href="#" onclick="location.href='login.html'">Logout</a></li>
                     </ul>
                 </div>
             </div>
@@ -54,22 +54,22 @@
                     <!-- Category Item 1-->
                     <div class="col-md-3 col-lg-3 mb-5">
                         <div class="portfolio-item mx-auto" data-toggle="modal" data-target="#portfolioModal1">
-                        <a href="#" onclick="location.href='/cooking/baking'">
+                        <a href="#" onclick="location.href='class_baking.html'">
                             <div class="portfolio-item-caption d-flex align-items-center justify-content-center h-100 w-100">
                                 <div class="portfolio-item-caption-content text-center text-white"><i class="fas fa-plus fa-3x"></i></div>
                             </div>
-                            <img class="img-fluid" src="{{url_for('static', filename='assets/img/portfolio/요리_베이킹.png')}}" alt="" />
+                            <img class="img-fluid" src="static/assets/img/portfolio/요리_베이킹.png" alt="" />
                         </a>
                         </div>
                     </div>
                     <!-- Category Item 2-->
                     <div class="col-md-3 col-lg-3 mb-5">
                         <div class="portfolio-item mx-auto" data-toggle="modal" data-target="#portfolioModal2">
-                        <a href="#" onclick="location.href='/cooking/drink'">
+                        <a href="#" onclick="location.href='class_drink.html'">
                             <div class="portfolio-item-caption d-flex align-items-center justify-content-center h-100 w-100">
                                 <div class="portfolio-item-caption-content text-center text-white"><i class="fas fa-plus fa-3x"></i></div>
                             </div>
-                            <img class="img-fluid" src="{{url_for('static', filename='assets/img/portfolio/요리_음료.png')}}" alt="" />
+                            <img class="img-fluid" src="static/assets/img/portfolio/요리_음료.png" alt="" />
                         </a>
                         </div>
                     </div>
@@ -77,22 +77,22 @@
                     <!-- Category Item 3-->
                     <div class="col-md-3 col-lg-3 mb-5">
                         <div class="portfolio-item mx-auto" data-toggle="modal" data-target="#portfolioModal4">
-                        <a href="#" onclick="location.href='/cooking/meal'">
+                        <a href="#" onclick="location.href='class_meal.html'">
                             <div class="portfolio-item-caption d-flex align-items-center justify-content-center h-100 w-100">
                                 <div class="portfolio-item-caption-content text-center text-white"><i class="fas fa-plus fa-3x"></i></div>
                             </div>
-                            <img class="img-fluid" src="{{url_for('static', filename='assets/img/portfolio/요리_식사류.png')}}" alt="" />
+                            <img class="img-fluid" src="static/assets/img/portfolio/요리_식사류.png" alt="" />
                         </a>
                         </div>
                     </div>
                     <!-- Category Item 4-->
                     <div class="col-md-3 col-lg-3 mb-5">
                         <div class="portfolio-item mx-auto" data-toggle="modal" data-target="#portfolioModal5">
-                        <a href="#" onclick="location.href='/cooking/etc'">
+                        <a href="#" onclick="location.href='class_cooking_etc.html'">
                             <div class="portfolio-item-caption d-flex align-items-center justify-content-center h-100 w-100">
                                 <div class="portfolio-item-caption-content text-center text-white"><i class="fas fa-plus fa-3x"></i></div>
                             </div>
-                            <img class="img-fluid" src="{{url_for('static', filename='assets/img/portfolio/기타.png')}}" alt="" />
+                            <img class="img-fluid" src="static/assets/img/portfolio/기타.png" alt="" />
                         </a>
                         </div>
                     </div>
@@ -132,9 +132,9 @@
         <!-- Third party plugin JS-->
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.4.1/jquery.easing.min.js"></script>
         <!-- Contact form JS-->
-        <script src="{{url_for('static', filename='assets/mail/jqBootstrapValidation.js')}}"></script>
-        <script src="{{url_for('static', filename='assets/mail/contact_me.js')}}"></script>
+        <script src="static/assets/mail/jqBootstrapValidation.js"></script>
+        <script src="static/assets/mail/contact_me.js"></script>
         <!-- Core theme JS-->
-        <script src="{{url_for('static', filename='js/scripts.js')}}"></script>
+        <script src="static/js/scripts.js"></script>
     </body>
 </html>
