@@ -50,7 +50,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
     <meta name="description" content="" />
     <meta name="author" content="" />
-    <title>makeClass</title>
+    <title>Community_Posting</title>
     <!-- Favicon-->
     <link rel="icon" type="image/x-icon" href="assets/img/favicon.ico" />
     <!-- Font Awesome icons (free version)-->
@@ -96,6 +96,8 @@
 
     <!-- Portfolio Section-->
     <form action="/makeClass" method="post">
+    <input type="hidden" name="cat_name" value="{{b_category}}">
+    <input type="hidden" name="cat_detail" value="{{s_category}}">
     <section class="page-section portfolio" id="portfolio">
         <div class="container">
             <!-- Portfolio Section Heading-->
@@ -113,11 +115,11 @@
                 <table style="font-family: 'Nanum Gothic Coding', monospace; font-size:20px;" class="type04">
                     <tr>
                         <th scope="row">클래스 명</th>
-                        <td><input required type="text" id="c_name" name="c_name"></td>
+                        <td><input type="text" id="c_name" name="c_name"></td>
                     </tr>
                     <tr>
                         <th scope="row">가격</th>
-                        <td><input required type="text" name="cost" id="cost" maxlength="20"></td>
+                        <td><input type="text" name="cost" id="cost" maxlength="20"></td>
                     </tr>
                     <tr>
                         <th scope="row">카테고리</th>
@@ -126,7 +128,7 @@
                     <tr>
                         <th scope="row">장소</th>
                         <td>
-                            <select required name="m" id="m">
+                            <select name="m" id="m">
                                 <option value=" ">선택</option>
                                 <option value="offline">Offline</option>
                                 <option value="online">Online</option>
