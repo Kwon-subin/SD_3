@@ -61,7 +61,8 @@ def register_student():
             'age' : age, #만나이로 통일
             'birth' : birth_str, #YYYYMMDD
             'phone' :  phone, #'-'포함
-            'T' : False #Teacher, Teacher > True, Student > False
+            'T' : False, #Teacher, Teacher > True, Student > False
+            'class' : []
         }
         res = es.get_doc('account', id)
         if res == -1:
@@ -104,7 +105,8 @@ def register_teacher():
             'age' : age, #만나이로 통일
             'birth' : birth_str, #YYYYMMDD
             'phone' :  phone, #'-'포함
-            'T' : True #Teacher, Teacher > True, Student > False
+            'T' : True, #Teacher, Teacher > True, Student > False
+            'class' : []
         }
         cer = request.form['certificate_num']
         cer_num = int(cer)
@@ -134,6 +136,7 @@ def login():
                 session['user_id'] = user_id
                 session['name'] = res['_source']['name']
                 session['T'] = res['_source']['T']
+                session['class'] = res['_source']['class']
                 return redirect(url_for('class.main_class'))
             else:
                 return render_template('login.html')
