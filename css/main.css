@@ -390,6 +390,37 @@ h6, .h6 {
   font-size: 1rem;
 }
 
+.rating .rate_radio {
+    position: relative;
+    display: inline-block;
+    z-index: 20;
+    opacity: 0.001;
+    width: 40px;
+    height: 40px;
+    background-color: #fff;
+    cursor: pointer;
+    vertical-align: top;
+    display: none;
+}
+.rating .rate_radio + label {
+    position: relative;
+    display: inline-block;
+    margin-left: -4px;
+    z-index: 10;
+    width: 40px;
+    height: 40px;
+    background-image: url("../assets/img/photo/starrate.png");
+    background-repeat: no-repeat;
+    background-size: 40px 40px;
+    cursor: pointer;
+    background-color: #c9c9c9;
+}
+
+.rating .rate_radio:checked + label {
+    background-color: #ffd900;
+}
+
+
 .lead {
   font-size: 1.25rem;
   font-weight: 300;
