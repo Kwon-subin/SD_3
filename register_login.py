@@ -1,11 +1,11 @@
 import ESGuide as es
-from flask import Flask
+from flask import Blueprint
 from flask import render_template
 from flask import request, session
+from flask import redirect, url_for
 from werkzeug.utils import secure_filename
 import sys
 import re
-import requests
 import operator
 import time
 
@@ -13,22 +13,22 @@ from datetime import datetime
 from elasticsearch import Elasticsearch
 from elasticsearch import helpers
 
-app = Flask(__name__)
-app.secret_key = "SD_3"
+bp_login = Blueprint('login', __name__)
+bp_login.secret_key = "SD_3"
 
-@app.route('/')
+@bp_login.route('/')
 def main():
     return render_template("login.html")
 
-@app.route('/choose/student', methods=['get'])
+@bp_login.route('/choose/student', methods=['get'])
 def choose_register():
     return render_template("register_student.html")
 
-@app.route('/choose/teacher', methods=['get'])
+@bp_login.route('/choose/teacher', methods=['get'])
 def choose_teacher():
     return render_template("register_teacher.html")
 
-@app.route('/register/student', methods=['POST'])
+@bp_login.route('/register/student', methods=['POST'])
 def register_student():
     if request.method == 'POST':
         T_data = False
@@ -66,16 +66,13 @@ def register_student():
         res = es.get_doc('account', id)
         if res == -1:
             res2 = es.insert_doc('account' ,id, accountDic)
-            if res2 == 0:
-                return render_template('register_s.html')
-            else: #디버깅
-                return render_template('register_f.html')
-                #return render_template('register_page.html')
+            return render_template('login.html')
+
         else:
-            return render_template('register_choose.html')
+            return render_template('register_student.html')
 
 
-@app.route('/register/teacher', methods=['POST'])
+@bp_login.route('/register/teacher', methods=['POST'])
 def register_teacher():
     if request.method == "POST":
         T_data = True
@@ -120,15 +117,11 @@ def register_teacher():
         if res == -1:
             res2 = es.insert_doc('account' ,id, accountDic)
             res3 = es.insert_doc('teacher', id, teacher)
-            if res2 == 0 and res3 == 0:
-                return render_template('register_s.html')
-            else: #디버깅
-                return render_template('register_f.html')
-                #return render_template('register_page.html')
+            return render_template('login.html')
         else: #있는 아이디 인 경우
-            return render_template('register_choose.html')
+            return render_template('register_teacher.html')
 
-@app.route('/login_input', methods=['POST'])
+@bp_login.route('/login_input', methods=['POST'])
 def login():
     if request.method == 'POST':
         user_id = request.form['user_id']
@@ -141,9 +134,9 @@ def login():
                 session['user_id'] = user_id
                 session['name'] = res['_source']['name']
                 session['T'] = res['_source']['T']
-                return render_template('login_s.html')
+                return redirect(url_for('class.main_class'))
             else:
                 return render_template('login.html')
 
 if __name__ == '__main__':
-    app.run(host='127.0.0.1', port=5000, debug=True)
+    bp_login.run(host='127.0.0.1', port=5000, debug=True)
