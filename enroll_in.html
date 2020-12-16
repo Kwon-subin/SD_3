@@ -84,15 +84,17 @@
                 <!-- About Section Content-->
                 <div class="row">
                     <div class="col-lg-4 ml-auto"><img class="img-fluid" src="static/assets/img/photo/class.jpg" alt="" /></div>
-                    <div class="col-lg-4 mr-auto"><p class="lead">클래스 설명</br>{{c_content}}</br>비용 : {{cost}}</br>시간 : {{when}}</p></div>
+                    <div class="col-lg-4 mr-auto"><p class="lead">클래스 설명</br>{{c_content}}</br>비용 : {{cost}}</br>시간 : {{start}} ~ {{end}}</p></div>
                 </div>
                 <!-- About Section Button-->
+                <form action="/enroll" method="POST">
                 <div class="text-center mt-4">
-                    <a class="btn btn-xl btn-outline-light" href="https://startbootstrap.com/theme/freelancer/">
+                    <a class="btn btn-xl btn-outline-light">
                         <i class="fas fa-download mr-2"></i>
                         Enroll!
                     </a>
                 </div>
+                </form>
             </div>
         </section>
         <!-- Review Section-->
@@ -135,7 +137,7 @@
                     </form>
                     
                     <!-- 리뷰 출력-->
-                    {% if reading ['reviews'] != -1 %}
+                    {% if reading['reviews'] != -1 %}
                         {% for review in reading['reviews'] %}
                             <div class="lead">
                                 id : {{review['_source']['ID']}} &emsp; 점수 : {{review['_source']['rate']}}</br>
