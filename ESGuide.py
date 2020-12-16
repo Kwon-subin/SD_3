@@ -322,6 +322,7 @@ if __name__=='__main__':
                 'start' : 'String', #YYYY-MM-DD
                 'end' : 'String', #YYYY-MM-DD
                 'M' : False, #Meet, Offline > True, Online > False
+                'c_content' : 'String'
                 }
         insert_doc('class', 'guide', _class)
 
